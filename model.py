@@ -1,7 +1,7 @@
 """Models and database functions for Frienergy project."""
 
 from flask_sqlalchemy import SQLAlchemy
-from datetime import date
+import datetime
 
 db = SQLAlchemy()
 
@@ -25,9 +25,8 @@ class User(db.Model):
         """Provide helpful representation when printed."""
 
         return "<User user_id=%s name=%s %s>" % (self.user_id,
-                                                 self.first_name, 
+                                                 self.first_name,
                                                  self.last_name)
-        
 
 
 class Contact(db.Model):
@@ -47,9 +46,9 @@ class Contact(db.Model):
     city = db.Column(db.String(64), nullable=True)
     state = db.Column(db.String(2), nullable=True)
     zipcode = db.Column(db.String(5), nullable=True)
-    power = db.Column(db.Float, nullable=True)
-    
-
+    total_frienergy = db.Column(db.Float, nullable=True)
+    avg_t_btwn_ints = db.Column(db.Float, nullable=True)
+    t_since_last_int = db.Column(db.Integer, nullable=True)
 
     def __repr__(self):
         """Provide helpful representation when printed."""
@@ -70,10 +69,6 @@ class Note(db.Model):
                                db.ForeignKey('interactions.interaction_id'),
                                nullable=False)
     text = db.Column(db.Text, nullable=False)
-    # date = db.Column(db.Integer,
-    #                  db.ForeignKey('interactions.date'),
-    #                  nullable=False)
-
 
     def __repr__(self):
         """Provide helpful representation when printed."""
@@ -100,12 +95,14 @@ class Interaction(db.Model):
                      nullable=False)
     frienergy = db.Column(db.Integer,
                           nullable=False)
+    t_delta_since_last_int = db.Column(db.Integer,
+                                       nullable=True)
 
     user = db.relationship("User",
                             backref=db.backref("interactions",
                             order_by=interaction_id))
     contact = db.relationship("Contact",
-                            backref=db.backref("interactions", 
+                            backref=db.backref("interactions",
                             order_by=interaction_id))
     note = db.relationship("Note",
                            backref=db.backref("interactions",
@@ -116,7 +113,7 @@ class Interaction(db.Model):
 
         return "<Interaction id=%s with=%s, %s date=%s>" % (
             self.interaction_id,
-            contact.first_name, user.first_name, 
+            contact.first_name, user.first_name,
             self.date)
 
 
@@ -140,5 +137,5 @@ if __name__ == "__main__":
     # in a state of being able to work with the database directly.
 
     from server import app
-    connect_to_db(app)    
+    connect_to_db(app)
     print "Connected to DB."

@@ -1,77 +1,267 @@
 {% extends 'base.html' %}
 {% block content %}
 
-    <h2>{{ user.first_name }}'s Profile</h2>
-    <p>Zipcode: {{ user.zipcode }}</p>
-    <p>Email: {{ user.email }}</p>
-    
+<div class="container-fluid">
 
-<div class="panel panel-default">
-  <div class="panel-heading">
-    <h3 class="panel-title">Panel title</h3>
-  </div>
-  <div class="panel-body">
-    Panel content
-  </div>
-</div>
+    <!-- profile information row -->
+    <div class="row">
 
-    <div class="panel panel-default .col-md-6">
-        <div class="panel-heading">
-            <h3 class="panel-title">Contacts: </h3>
+        <!-- profile column -->
+        <div class="col-md-12">
+
+            <!-- profile panel -->
+            <div class="panel panel-default">
+                <div class="panel-heading clearfix">
+                    <!-- FIXME #need to add functionality to "edit" button -->
+                    <button type="button" class="btn btn-primary btn-xs pull-right" data-toggle="modal" data-target="#myModal">Edit</button>
+                    <h2 class="panel-title pull-left">{{ user.first_name }}'s Profile</h2>
+                </div>
+                <div class="panel-body">
+                    <p>Zipcode: {{ user.zipcode }}</p>
+                    <p>Email: {{ user.email }}</p>
+                </div>
+            </div>
+
         </div>
-        <div class="panel-body">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <!-- <th>Email</th>
-                        <th>Phone</th>
-                        <th>Address</th> -->
-                        <th>Power</th>
-                    </tr>
-                </thead>
-                {% if contacts %}
-                <tbody>
-                    {% for contact in contacts %}
-                    <tr>
-                        <td>{{ contact.first_name }} {{ contact.last_name }}</td>
-                        <!-- <td>{{ contact.email }}</td>
-                        <td>{{ contact.cell_phone }}</td>
-                        <td>{{ contact.street }} {{ contact.city }} {{ contact.state }} {{ contact.zipcode }}</td> -->
-                        <td>{{ contact.power }}</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-                {% endif %}
-            </table>
-        </div>
+
     </div>
 
-    <p>Interactions: </p>
-    <table>
-        <thead>
-            <tr>
-                <th>Date</th>
-                <th>With</th>
-                <th>Frienergy</th>
-                <th>Notes</th>
-            </tr>
-        </thead>
-        {% if interactions %}
-        <tbody>
-            {% for i in interactions %}
-            <tr>
-                <td>{{ i.date }}</td>
-                <td>{{ i.contact.first_name }} {{ i.contact.last_name }}</td>
-                <td>{{ i.frienergy }}</td>
-                {% if i.note %}
-                <td>{{ i.note[0].text }}</td>
-                {% endif %}
-            </tr>
-            {% endfor %}
-        </tbody>
-        {% endif %}
-    </table>
-    <p>Frienergy Stats: </p>
+    <!-- contacts and interactions row-->
+    <div class="row">
+
+        <!-- contacts column -->
+        <div class="col-md-4">
+            
+            <!-- contacts panel -->
+            <div class="panel panel-default">
+                <div class="panel-heading clearfix">
+                    
+                    <button type="button" class="btn btn-primary btn-xs pull-right" data-toggle="modal" data-target="#addContactModal">Add Contact</button>
+                    <h3 class="panel-title pull-left">Contacts: </h3>
+
+                </div>
+                <div class="panel-body">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Power</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        {% if contacts %}
+                        <tbody>
+                            {% for item in contacts %}
+                            <tr class="contact-info">
+                                <td>{{ item[1] }} {{ item[2] }}</td>
+                                <td>{{ item[0] }}</td>
+                                <td><button type="button" class="btn btn-primary btn-xs pull-right add-int" data-toggle="modal" data-target="#addInteractionModal" data-name="{{ item[1] }} {{ item[2] }}" data-contact-id="{{ item[3] }}">Add Interaction</button></td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                        {% endif %}
+                    </table>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- interactions column -->
+        <div class="col-md-8">
+
+            <!-- interactions panel -->
+            <div class="panel panel-default">
+                <div class="panel-heading clearfix">
+                    <h3 class="panel-title pull-left">Interactions: </h3>
+                </div>
+                <div class="panel-body">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>With</th>
+                                <th>Frienergy</th>
+                                <th>Notes</th>
+                            </tr>
+                        </thead>
+                        {% if interactions %}
+                        <tbody>
+                            {% for i in interactions %}
+                            <tr>
+                                <td>{{ i.date }}</td>
+                                <td>{{ i.contact.first_name }} {{ i.contact.last_name }}</td>
+                                <td>{{ i.frienergy }}</td>
+                                {% if i.note %}
+                                <td>{{ i.note[0].text }}</td>
+                                {% endif %}
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                        {% endif %}
+                    </table>
+                </div>
+            </div>
+
+        </div> 
+
+    </div>
+
+</div>
+
+<!-- Add Contact Modal -->
+<div class="modal fade" id="addContactModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+
+    <div class="modal-dialog" role="document">
+
+        <div class="modal-content">
+
+            <!-- modal header -->
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Add Contact</h4>
+            </div>
+
+            <!-- modal body -->
+            <div class="modal-body">
+
+                <!-- form -->
+                <form action="/addContact" id="add-contact-form" class="form-horizontal" method="POST">
+
+                <div class="form-group">
+                    <label for="first-name" class="col-sm-2 control-label">First Name </label>
+                    <div class="col-sm-10">
+                        <input type="text" name="first-name" class="form-control" id="first-name" placeholder="First" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="last-name" class="col-sm-2 control-label">Last Name </label>
+                    <div class="col-sm-10">
+                        <input type="text" name="last-name" class="form-control" id="last-name" placeholder="Last">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="contact-email" class="col-sm-2 control-label">Email </label>
+                    <div class="col-sm-10">
+                        <input type="email" name="contact-email" class="form-control" id="contact-email" placeholder="email@domain.com">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="cell-phone" class="col-sm-2 control-label">Cell Phone </label>
+                    <div class="col-sm-10">
+                        <input type="text" name="cell-phone" class="form-control" id="cell-phone" placeholder="415-555-1234">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="street" class="col-sm-2 control-label">Street </label>
+                    <div class="col-sm-10">
+                        <input type="text" name="street" class="form-control" id="street" placeholder="1234 Main St. #567">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="city" class="col-sm-2 control-label">City </label>
+                    <div class="col-sm-10">
+                        <input type="text" name="city" class="form-control" id="city" placeholder="Redwood City">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="state" class="col-sm-2 control-label">State </label>
+                    <div class="col-sm-10">
+                        <input type="text" name="state" class="form-control" id="state" placeholder="CA">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="zipcode" class="col-sm-2 control-label">Zipcode </label>
+                    <div class="col-sm-10">
+                        <input type="text" name="zipcode" class="form-control" id="zipcode" placeholder="94062">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-sm-offset-9 col-sm-10">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Add</button>
+                    </div>
+                </div>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- Add Interaction Modal -->
+<div class="modal fade" id="addInteractionModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+
+    <div class="modal-dialog" role="document">
+
+        <div class="modal-content">
+
+            <!-- modal header -->
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Add Interaction</h4>
+                <!-- FIXME #not getting contact name from jquery -->
+                <h5 id="contact-name-for-form"></h5>
+            </div>
+
+            <!-- modal body -->
+            <div class="modal-body">
+
+                <!-- form -->
+                <form action="/addInteraction" id="add-interaction-form" class="form-horizontal" method="POST">
+                <div class="form-group">
+                    <!-- FIXME #not getting contact id value from jquery -->
+                    <input type="hidden" name="contact-id" id="contact-id">
+                </div>
+                <div class="form-group">
+                    <label for="date" class="col-sm-2 control-label">Date </label>
+                    <div class="col-sm-10">
+                        <input type="date" name="date" class="form-control" id="date">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="frienergy" class="col-sm-2 control-label">Frienergy </label>
+                    <div class="col-sm-10">
+                        <input type="number" name="frienergy" class="form-control" id="frienergy" min="1" max="10">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="notes" class="col-sm-2 control-label">Notes </label>
+                    <div class="col-sm-10">
+                        <input type="textarea" name="notes" class="form-control" id="notes" rows="2">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-offset-9 col-sm-10">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary" id="add-int-submit">Add</button>
+                    </div>
+                </div>
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script type="text/javascript">
+
+    function getValues(evt) {
+        var contactName = $(this).data('name');
+        var contactId = $(this).data('contact-id');
+        $('#contact-name-for-form').text(contactName);
+        $('#contact-id').attr('value', contactId);
+    }
+
+    $('.add-int').on('click', getValues);
+
+</script>
 
 {% endblock %}

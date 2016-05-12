@@ -13,7 +13,7 @@ import datetime
 
 def load_users():
     """Load users from users.csv into database."""
-    
+
     print "Users"
 
     # Delete all rows in table, so if we need to run this a second time,
@@ -22,7 +22,7 @@ def load_users():
 
     # Read users.csv file and insert data
     data = open("seed-data/users.csv")
-    for row in data: 
+    for row in data:
         row = row.rstrip()
         user_id, first_name, last_name, email, password, zipcode = row.split(",")
         # create an instance of the user class with the data
@@ -43,16 +43,16 @@ def load_users():
 
 def load_contacts():
     """Load contacts from contacts.csv into database."""
-    
+
     # Delete all ros in table so there won't be dupes
     # Contact.query.delete()
 
-    # read contacts.csv file and insert data 
+    # read contacts.csv file and insert data
     data = open("seed-data/contacts.csv", 'rU')
     for row in data:
         row = row.rstrip()
-        user_id, contact_id, first_name, last_name, email, cell_phone, street, city, state, zipcode, power = row.split(",")
-        # creates an instance of the Contact class for each contact 
+        user_id, contact_id, first_name, last_name, email, cell_phone, street, city, state, zipcode, total_frienergy, avg_t_btwn_ints, t_since_last_int = row.split(",")
+        # creates an instance of the Contact class for each contact
         contact = Contact(user_id=user_id,
                           contact_id=contact_id,
                           first_name=first_name,
@@ -63,7 +63,9 @@ def load_contacts():
                           city=city,
                           state=state,
                           zipcode=zipcode,
-                          power=power)
+                          total_frienergy=total_frienergy,
+                          avg_t_btwn_ints=avg_t_btwn_ints,
+                          t_since_last_int=t_since_last_int)
         # add each movie to the session db
         db.session.add(contact)
         print contact
@@ -74,16 +76,14 @@ def load_contacts():
 
 def load_interactions():
     """Load interactions from interactions.csv into database."""
-    
+
     # Clears table of existing rows
     Interaction.query.delete()
 
     # Read interactions.csv and insert data
     data = open("seed-data/interactions.csv", 'rU')
     for row in data:
-        user_id, contact_id, interaction_id = row.split(",")[:3]
-        date, frienergy = row.split(",")[3:5]
-        
+        user_id, contact_id, interaction_id, date, frienergy, t_delta_since_last_int = row.split(",")
         # convert date into datetime date object
         date = datetime.datetime.strptime(date, "%d-%b-%Y")
 
@@ -92,7 +92,8 @@ def load_interactions():
                                   contact_id=contact_id,
                                   interaction_id=interaction_id,
                                   date=date,
-                                  frienergy=frienergy)
+                                  frienergy=frienergy,
+                                  t_delta_since_last_int=t_delta_since_last_int)
         # Add interaction instance to db
         db.session.add(interaction)
     data.close()
@@ -102,7 +103,7 @@ def load_interactions():
 
 def load_notes():
     """Load notes from notes.csv into database."""
-    
+
     # Clears table of existing rows
     Note.query.delete()
 
@@ -122,6 +123,9 @@ def load_notes():
     db.session.commit()
 
 
+################################################################################
+# Funtions to set values for id's in sequence after seeding the database
+
 def set_val_user_id():
     """Set value for the next user_id after seeding database"""
 
@@ -134,6 +138,47 @@ def set_val_user_id():
     db.session.execute(query, {'new_id': max_id + 1})
     db.session.commit()
 
+
+def set_val_contact_id():
+    """Set value for the next contact_id after seeding database"""
+
+    # Get the Max contact_id in the database
+    result = db.session.query(func.max(Contact.contact_id)).one()
+    max_id = int(result[0])
+
+    # Set the value for the next contact_id to be max_id + 1
+    query = "SELECT setval('contacts_contact_id_seq', :new_id)"
+    db.session.execute(query, {'new_id': max_id + 1})
+    db.session.commit()
+
+
+def set_val_int_id():
+    """Set value for the next interaction_id after seeding database"""
+
+    # Get the Max interaction_id in the database
+    result = db.session.query(func.max(Interaction.interaction_id)).one()
+    max_id = int(result[0])
+
+    # Set the value for the next interaction_id to be max_id + 1
+    query = "SELECT setval('interactions_interaction_id_seq', :new_id)"
+    db.session.execute(query, {'new_id': max_id + 1})
+    db.session.commit()
+
+
+def set_val_note_id():
+    """Set value for the next note_id after seeding database"""
+
+    # Get the Max note_id in the database
+    result = db.session.query(func.max(Note.note_id)).one()
+    max_id = int(result[0])
+
+    # Set the value for the next note_id to be max_id + 1
+    query = "SELECT setval('notes_note_id_seq', :new_id)"
+    db.session.execute(query, {'new_id': max_id + 1})
+    db.session.commit()
+
+################################################################################
+# Runs the seed process
 
 if __name__ == "__main__":
     connect_to_db(app)
@@ -151,4 +196,7 @@ if __name__ == "__main__":
     load_notes()
     print "Finished load_notes"
     set_val_user_id()
+    set_val_contact_id()
+    set_val_int_id()
+    set_val_note_id()
     print "Done!"

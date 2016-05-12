@@ -7,11 +7,12 @@
   <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
   <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/rateYo/2.1.1/jquery.rateyo.min.css">
+  <script src="https://code.jquery.com/jquery.js"></script>
   <link rel="stylesheet" href="/static/stylesheet.css">
 </head>
 
 <body>
+
 <nav class="navbar navbar-default">
   <div class="container-fluid">
     <!-- Brand and toggle get grouped for better mobile display -->
@@ -75,11 +76,14 @@
 
         <!-- Modal content-->
         <div class="modal-content">
+
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-            <h4 class="modal-title">Login</h4>
+                <h4 class="modal-title">Login</h4>
             </div>
+
             <div class="modal-body">
+              
               <form action="/login" id="login_form" class="form-horizontal" method="POST">
                 <div class="form-group">
                   <label for="inputEmail" class="col-sm-2 control-label">Email</label>
@@ -93,7 +97,7 @@
                     <input type="password" name="password" class="form-control" id="inputPassword3" placeholder="Password">
                   </div>
                 </div>
-<!-- FIXME -->
+                <!-- FIXME -->
                 <!-- <div class="form-group">
                   <div class="col-sm-offset-2 col-sm-10">
                     <div class="checkbox">
@@ -165,14 +169,10 @@
                   </div>
                 </div>
 
-                <!-- <div class="form-group has-success">
-                  <label for="inputPassword" class="col-sm-2 control-label">Re-enter Password</label>
-                  <div class="col-sm-10">
-                    <input type="password" class="form-control form-control-success" id="inputPassword" placeholder="Re-enter password">
-                  </div>
-                </div> -->
-
                 <div class="form-group">
+                  <div class="col-sm-offset-2">
+                    <p> &nbsp &nbsp Already have an account? <a data-toggle="modal" href="#" data-dismiss="modal" data-target="#loginModal"> Login.</a></p>
+                  </div>
                   <div class="col-sm-offset-10 col-sm-10">
                     <button type="submit" class="btn btn-primary">Sign in</button>
                   </div>
@@ -183,19 +183,27 @@
     </div>
 </div>
 
-{% with messages = get_flashed_messages() %}
-    {% if messages %}
-    <div class="alert alert-info">
-        {% for message in messages %}
-            <p>{{ message }}</p>
-        {% endfor %}
+<div class="container-fluid">
+
+  <!-- Flash messages -->
+  <div class="row">
+    <div class="col-md-12">
+      {% with messages = get_flashed_messages() %}
+        {% if messages %}
+          <div class="alert alert-info">
+            {% for message in messages %}
+              <p>{{ message }}</p>
+            {% endfor %}
+          </div>
+        {% endif %}
+      {% endwith %}
     </div>
-    {% endif %}
-{% endwith %}
-<div class="container">
-{% block content %} 
-put your content here 
-{% endblock %}
+  </div>
+
+  {% block content %} 
+    <!-- child template content goes here -->
+  {% endblock %}
+
 </div>
 
 </body>
