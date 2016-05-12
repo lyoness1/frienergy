@@ -1,0 +1,202 @@
+<!doctype html>
+<html>
+<head>
+  <title>Frienergy</title>
+  <link href='https://fonts.googleapis.com/css?family=Hind|Asap|Amatic+SC:700' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Fontdiner+Swanky' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+  <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/rateYo/2.1.1/jquery.rateyo.min.css">
+  <link rel="stylesheet" href="/static/stylesheet.css">
+</head>
+
+<body>
+<nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="/">Frienergy</a>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+        <li><a href="/contacts">Contacts</a></li>
+        <li><a href="/interactions">Interactions</a></li>
+       <!--  <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="#">Action</a></li>
+            <li><a href="#">Another action</a></li>
+            <li><a href="#">Something else here</a></li>
+            <li role="separator" class="divider"></li>
+            <li><a href="#">Separated link</a></li>
+            <li role="separator" class="divider"></li>
+            <li><a href="#">One more separated link</a></li>
+          </ul>
+        </li> -->
+      </ul>
+      <!-- <form class="navbar-form navbar-left" role="search">
+        <div class="form-group">
+          <input type="text" class="form-control" placeholder="Search">
+        </div>
+        <button type="submit" class="btn btn-default">Submit</button>
+      </form> -->
+      <ul class="nav navbar-nav navbar-right">
+        {% if session.get("logged_in_email") %}
+        <li><a href="/dashboard/{{session.get('logged_in_user_id')}}">{{ session.get("logged_in_user_name") }}</a></li>
+        <li><a href="/logout">Logout</a></li>
+
+        <!-- <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ session.get("logged_in_email") }} <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="/logout">Logout</a></li>
+          </ul>
+        </li> -->
+        {% else %}
+        <li><a data-toggle="modal" href="#registerModal">Register</a></li>
+        <li><a data-toggle="modal" href="#loginModal">Login</a></li>
+        {% endif %}
+      </ul>
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
+
+<!-- Login Modal -->
+<div id="loginModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">Login</h4>
+            </div>
+            <div class="modal-body">
+              <form action="/login" id="login_form" class="form-horizontal" method="POST">
+                <div class="form-group">
+                  <label for="inputEmail" class="col-sm-2 control-label">Email</label>
+                  <div class="col-sm-10">
+                    <input type="email" name="email" class="form-control" id="inputEmail" placeholder="Email">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="inputPassword3" class="col-sm-2 control-label">Password</label>
+                  <div class="col-sm-10">
+                    <input type="password" name="password" class="form-control" id="inputPassword3" placeholder="Password">
+                  </div>
+                </div>
+<!-- FIXME -->
+                <!-- <div class="form-group">
+                  <div class="col-sm-offset-2 col-sm-10">
+                    <div class="checkbox">
+                      <label>
+                        <input type="checkbox"> Remember me
+                      </label>
+                    </div>
+                  </div>
+                </div> -->
+                <div class="form-group">
+                  <div class="col-sm-offset-2">
+                    <p> &nbsp &nbsp No account? <a data-toggle="modal" href="#" data-dismiss="modal" data-target="#registerModal"> Register.</a></p>
+                  </div>
+                  <div class="col-sm-offset-10 col-sm-10">
+                    <button type="submit" class="btn btn-primary">Sign in</button>
+                  </div>
+                </div>
+              </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Register Modal -->
+<div id="registerModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">Register</h4>
+            </div>
+            <div class="modal-body">
+              <form action="/register" id="registration-form" class="form-horizontal" method="POST">
+
+                <div class="form-group">
+                  <label for="firstName" class="col-sm-2 control-label">First Name</label>
+                  <div class="col-sm-10">
+                    <input type="text" name="first-name" class="form-control" id="first-name" placeholder="First">
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="lastName" class="col-sm-2 control-label">Last Name</label>
+                  <div class="col-sm-10">
+                    <input type="text" name="last-name" class="form-control" id="last-name" placeholder="Last">
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="inputEmail" class="col-sm-2 control-label">Email</label>
+                  <div class="col-sm-10">
+                    <input type="email" name="email" class="form-control" id="inputEmail" placeholder="email@domain.com">
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="zipcode" class="col-sm-2 control-label">Zipcode</label>
+                  <div class="col-sm-10">
+                    <input type="text" name="zipcode" class="form-control" id="zipcode" placeholder="94062" size="5">
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="inputPassword" class="col-sm-2 control-label">Password</label>
+                  <div class="col-sm-10">
+                    <input type="password" name="password" class="form-control" id="inputPassword" placeholder="Password">
+                  </div>
+                </div>
+
+                <!-- <div class="form-group has-success">
+                  <label for="inputPassword" class="col-sm-2 control-label">Re-enter Password</label>
+                  <div class="col-sm-10">
+                    <input type="password" class="form-control form-control-success" id="inputPassword" placeholder="Re-enter password">
+                  </div>
+                </div> -->
+
+                <div class="form-group">
+                  <div class="col-sm-offset-10 col-sm-10">
+                    <button type="submit" class="btn btn-primary">Sign in</button>
+                  </div>
+                </div>
+              </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% with messages = get_flashed_messages() %}
+    {% if messages %}
+    <div class="alert alert-info">
+        {% for message in messages %}
+            <p>{{ message }}</p>
+        {% endfor %}
+    </div>
+    {% endif %}
+{% endwith %}
+<div class="container">
+{% block content %} 
+put your content here 
+{% endblock %}
+</div>
+
+</body>
+</html>
