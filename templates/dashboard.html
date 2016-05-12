@@ -5,31 +5,48 @@
     <p>Zipcode: {{ user.zipcode }}</p>
     <p>Email: {{ user.email }}</p>
     
-    <p>Contacts: </p>
-    <table>
-        <thead>
-            <tr>
-                <th>Name</th>
-                <th>Email</th>
-                <th>Phone</th>
-                <th>Address</th>
-                <th>Power</th>
-            </tr>
-        </thead>
-        {% if contacts %}
-        <tbody>
-            {% for contact in contacts %}
-            <tr>
-                <td>{{ contact.first_name }} {{ contact.last_name }}</td>
-                <td>{{ contact.email }}</td>
-                <td>{{ contact.cell_phone }}</td>
-                <td>{{ contact.street }} {{ contact.city }} {{ contact.state }} {{ contact.zipcode }}</td>
-                <td>{{ contact.power }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-        {% endif %}
-    </table>
+
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="panel-title">Panel title</h3>
+  </div>
+  <div class="panel-body">
+    Panel content
+  </div>
+</div>
+
+    <div class="panel panel-default .col-md-6">
+        <div class="panel-heading">
+            <h3 class="panel-title">Contacts: </h3>
+        </div>
+        <div class="panel-body">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <!-- <th>Email</th>
+                        <th>Phone</th>
+                        <th>Address</th> -->
+                        <th>Power</th>
+                    </tr>
+                </thead>
+                {% if contacts %}
+                <tbody>
+                    {% for contact in contacts %}
+                    <tr>
+                        <td>{{ contact.first_name }} {{ contact.last_name }}</td>
+                        <!-- <td>{{ contact.email }}</td>
+                        <td>{{ contact.cell_phone }}</td>
+                        <td>{{ contact.street }} {{ contact.city }} {{ contact.state }} {{ contact.zipcode }}</td> -->
+                        <td>{{ contact.power }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+                {% endif %}
+            </table>
+        </div>
+    </div>
+
     <p>Interactions: </p>
     <table>
         <thead>
