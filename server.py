@@ -7,6 +7,8 @@ from flask_debugtoolbar import DebugToolbarExtension
 
 from model import connect_to_db, db, User, Contact, Interaction, Note
 
+import datetime
+
 
 app = Flask(__name__)
 app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
@@ -168,35 +170,45 @@ def add_contact():
 def add_interaction():
     """Adds an interaction to the db"""
 
-    # gets current user's id
+    # gets current user's id from session
     user_id = session['logged_in_user_id']
-    print user_id
 
-    # gets contact information from form
-    contact_id = request.form.get('contact-id')
-    print contact_id
+    # gets info from add-interaction form
+    contact_id = int(request.form.get('contact-id'))
+    frienergy = int(request.form.get('frienergy'))
 
-    # gets interaction information from form
+    # gets data from add interaction form and converts to date object
     date = request.form.get('date')
-    print date
-    frienergy = request.form.get('frienergy')
-    note = request.form.get('notes')
+    date = datetime.datetime.strptime(date, '%Y-%m-%d').date()
 
-    # calculates time delta since last interaction
+# FIXME #can't instantiate interaction unless Note obj exists as list object.
+# How can I do this and pass "none" when creating an interaction instance?
+    # gets note as string and converts to note object
+    text = request.form.get('notes')
+    new_note = Note(contact_id=contact_id,
+                    text=text)
+
+    # calculates time delta since last interaction, returns an integer of days
     former_ints = db.session.query(Interaction).filter(Interaction.contact_id == contact_id).all()
-    former_ints = sorted(former_ints, key=lambda i: i.date, reverse=True)
-    elapsed_time = former_ints[0].date - date
-    print elapsed_time
+    if former_ints:
+        former_ints = sorted(former_ints, key=lambda i: i.date, reverse=True)
+        elapsed_time = date - former_ints[0].date
+        elapsed_time = int(elapsed_time.days)
+    else:
+        elapsed_time = None
 
-    # creates an instance for the contact and adds them to the db
+    # creates an interaction instance for the contact and adds it to the db
     new_interaction = Interaction(user_id=user_id,
                                   contact_id=contact_id,
                                   date=date,
                                   frienergy=frienergy,
-                                  note=note,
+                                  note=[new_note],
                                   t_delta_since_last_int=elapsed_time)
-
     db.session.add(new_interaction)
+
+    # updates contact object's total_frienergy and avg_t_delta attributes
+    update_contact(contact_id)
+
     db.session.commit()
 
     flash("Interaction successfully added.")
@@ -205,6 +217,32 @@ def add_interaction():
 
 ################################################################################
 # Helper functions
+
+
+def update_contact(contact_id):
+    """updates contact attributes: total_frienergy, avg_t_btwn_ints, and t_since_last_int"""
+
+    contact = db.session.query(Contact).filter(Contact.contact_id == contact_id).first()
+
+    # calculates total frienergy for the contact
+    total_frienergy = 0
+    interactions = contact.interactions
+    for i in interactions:
+        total_frienergy += i.frienergy
+    contact.total_frienergy = total_frienergy
+
+    # calculates average time between interactions for contact
+    deltas = []
+    for i in interactions[1:]:
+        deltas.append(i.t_delta_since_last_int)
+    if deltas:
+        contact.avg_t_btwn_ints = float(sum(deltas)) / len(deltas)
+    else:
+        contact.avg_t_btwn_ints = 0
+
+    # updates contact's relationship power
+    calculate_power(contact)
+
 
 def calculate_power(contact_obj):
     """calculates the power of a friendship as (total frienergy)/(avg interaction time-delta)"""

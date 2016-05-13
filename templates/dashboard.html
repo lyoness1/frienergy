@@ -55,6 +55,7 @@
                             <tr class="contact-info">
                                 <td>{{ item[1] }} {{ item[2] }}</td>
                                 <td>{{ item[0] }}</td>
+                                <!-- button stores contact name and id -->
                                 <td><button type="button" class="btn btn-primary btn-xs pull-right add-int" data-toggle="modal" data-target="#addInteractionModal" data-name="{{ item[1] }} {{ item[2] }}" data-contact-id="{{ item[3] }}">Add Interaction</button></td>
                             </tr>
                             {% endfor %}
@@ -204,7 +205,6 @@
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title" id="myModalLabel">Add Interaction</h4>
-                <!-- FIXME #not getting contact name from jquery -->
                 <h5 id="contact-name-for-form"></h5>
             </div>
 
@@ -214,7 +214,6 @@
                 <!-- form -->
                 <form action="/addInteraction" id="add-interaction-form" class="form-horizontal" method="POST">
                 <div class="form-group">
-                    <!-- FIXME #not getting contact id value from jquery -->
                     <input type="hidden" name="contact-id" id="contact-id">
                 </div>
                 <div class="form-group">
@@ -251,6 +250,7 @@
 
 </div>
 
+<!-- script to grab contact id and name when adding an interaction -->
 <script type="text/javascript">
 
     function getValues(evt) {

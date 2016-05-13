@@ -1,7 +1,6 @@
 """Models and database functions for Frienergy project."""
 
 from flask_sqlalchemy import SQLAlchemy
-import datetime
 
 db = SQLAlchemy()
 
@@ -95,29 +94,22 @@ class Interaction(db.Model):
                      nullable=False)
     frienergy = db.Column(db.Integer,
                           nullable=False)
+    user = db.relationship("User",
+                           backref=db.backref("interactions", order_by=interaction_id))
+    contact = db.relationship("Contact",
+                              backref=db.backref("interactions", order_by=interaction_id))
+    note = db.relationship("Note",
+                           backref=db.backref("interactions", order_by=interaction_id))
     t_delta_since_last_int = db.Column(db.Integer,
                                        nullable=True)
-
-    user = db.relationship("User",
-                            backref=db.backref("interactions",
-                            order_by=interaction_id))
-    contact = db.relationship("Contact",
-                            backref=db.backref("interactions",
-                            order_by=interaction_id))
-    note = db.relationship("Note",
-                           backref=db.backref("interactions",
-                           order_by=interaction_id))
 
     def __repr__(self):
         """Provide helpful representation when printed."""
 
         return "<Interaction id=%s with=%s, %s date=%s>" % (
             self.interaction_id,
-            contact.first_name, user.first_name,
+            self.contact_id, self.user_id,
             self.date)
-
-
-
 
 
 ##############################################################################
