@@ -118,7 +118,7 @@ def show_dashboard(user_id):
     # creates a list of tuples to store (power, fname, lname, contact_id) and sorts by power
     contact_powers = []
     for contact in user_contacts:
-        power = calculate_power(contact)
+        power = calculate_power(contact.contact_id)
         contact_powers.append((power, contact.first_name, contact.last_name, contact.contact_id))
     contact_powers = sorted(contact_powers, reverse=True)
 
@@ -182,36 +182,32 @@ def add_interaction():
     date = datetime.datetime.strptime(date, '%Y-%m-%d').date()
 
 # FIXME #can't instantiate interaction unless Note obj exists as list object.
-# How can I do this and pass "none" when creating an interaction instance?
+# How can I do this and pass "None" when creating an interaction instance?
     # gets note as string and converts to note object
     text = request.form.get('notes')
     new_note = Note(contact_id=contact_id,
                     text=text)
-
-    # calculates time delta since last interaction, returns an integer of days
-    former_ints = db.session.query(Interaction).filter(Interaction.contact_id == contact_id).all()
-    if former_ints:
-        former_ints = sorted(former_ints, key=lambda i: i.date, reverse=True)
-        elapsed_time = date - former_ints[0].date
-        elapsed_time = int(elapsed_time.days)
-    else:
-        elapsed_time = None
 
     # creates an interaction instance for the contact and adds it to the db
     new_interaction = Interaction(user_id=user_id,
                                   contact_id=contact_id,
                                   date=date,
                                   frienergy=frienergy,
-                                  note=[new_note],
-                                  t_delta_since_last_int=elapsed_time)
+                                  note=[new_note])
     db.session.add(new_interaction)
-
-    # updates contact object's total_frienergy and avg_t_delta attributes
-    update_contact(contact_id)
-
     db.session.commit()
 
+    # calculates the *Interaction* attributes (plural): time since last interaction
+    # can only be called after instantiating new interaction; order may be wrong
+    calculate_t_delta_since_last_int(contact_id)
+
+    # update all necessary contact attributes with new interaction data
+    update_avg_t_btwn_ints(contact_id)
+    update_total_frienergy(contact_id)
+
+    # provides user feedback that interaction has been added
     flash("Interaction successfully added.")
+
     return redirect("/dashboard/"+str(user_id))
 
 
@@ -219,36 +215,100 @@ def add_interaction():
 # Helper functions
 
 
-def update_contact(contact_id):
+def calculate_t_delta_since_last_int(contact_id):
+    """updates the *Interaction* attributes (plural): time since last interaction"""
+
+    # returns a list of all interactions on contact sorted by date, oldest first
+    int_list = db.session.query(Interaction).filter(Interaction.contact_id == contact_id).all()
+    int_list = sorted(int_list, key=lambda i: i.date)
+
+    # calculates time between each interaction and reassigns attribute. 
+    if len(int_list) > 1:
+        for n in range(1, len(int_list)):
+            delta = int_list[n].date - int_list[n-1].date
+            int_list[n].t_delta_since_last_int = abs(int(delta.days))
+    int_list[0].t_delta_since_last_int = 0
+
+
+    # commit changes to db
+    db.session.commit()
+
+
+def update_t_since_last_int(contact_id):
+    """calculates the *Contact* attribute (singular): time since last interaction"""
+
+    # gets contact object from their id
+    contact = Contact.query.get(contact_id)
+
+    # gets a datetime date object for today
+    today = datetime.date.today() # datetime.date(2016, 5, 13)
+    
+    # sorts the list of interactions for the contact by date, newest first
+    int_list = sorted(contact.interactions, key=lambda i: i.date, reverse=True)
+
+    # updates the attribute by subtracting dates and converting to integer
+    delta = int_list[0].date - today
+    contact.t_since_last_int = int(abs(delta))
+
+    # commit calculation to database
+    db.session.commit()
+
+def update_total_frienergy(contact_id):
     """updates contact attributes: total_frienergy, avg_t_btwn_ints, and t_since_last_int"""
 
-    contact = db.session.query(Contact).filter(Contact.contact_id == contact_id).first()
+    # gets contact object from their id
+    contact = Contact.query.get(contact_id)
 
-    # calculates total frienergy for the contact
+    # calculates total frienergy for the contact by looping through int objs
     total_frienergy = 0
     interactions = contact.interactions
     for i in interactions:
         total_frienergy += i.frienergy
-    contact.total_frienergy = total_frienergy
 
-    # calculates average time between interactions for contact
+    # sets the attribute to the contact in the db
+    contact.total_frienergy = float(total_frienergy)
+
+    # commit changes to db
+    db.session.commit()
+
+
+def update_avg_t_btwn_ints(contact_id):
+    """calculates average time between interactions for contact"""
+
+    # gets contact object from their id
+    contact = Contact.query.get(contact_id)
+
+    # makes a list of contact's interactions, sorted with oldest int first
+    int_list = contact.interactions
+    int_list = sorted(int_list, key=lambda i: i.date)
+
+    # makes a list to store all the time deltas between interactions
     deltas = []
-    for i in interactions[1:]:
+
+    # calculates the average of the time deltas
+    # if only one interaction, avg time delta is 0
+    for i in int_list[1:]:
         deltas.append(i.t_delta_since_last_int)
     if deltas:
-        contact.avg_t_btwn_ints = float(sum(deltas)) / len(deltas)
+        contact.avg_t_btwn_ints = float(sum(deltas)) / (len(deltas))
     else:
         contact.avg_t_btwn_ints = 0
 
-    # updates contact's relationship power
-    calculate_power(contact)
+    # commit changes to db
+    db.session.commit()
 
 
-def calculate_power(contact_obj):
+def calculate_power(contact_id):
     """calculates the power of a friendship as (total frienergy)/(avg interaction time-delta)"""
 
-    frienergy = db.session.query(Contact).filter(Contact.contact_id == contact_obj.contact_id).first().total_frienergy
-    avg_t_btwn_ints = db.session.query(Contact).filter(Contact.contact_id == contact_obj.contact_id).first().avg_t_btwn_ints
+    # gets contact object from their id
+    contact = Contact.query.get(contact_id)
+    
+    # gets current attributes of total frienergy and avg time delta between ints
+    frienergy = contact.total_frienergy
+    avg_t_btwn_ints = contact.avg_t_btwn_ints
+    
+    # calcualtes and returns relationship power
     if avg_t_btwn_ints != 0:
         return round(frienergy / avg_t_btwn_ints, 1)
     else:

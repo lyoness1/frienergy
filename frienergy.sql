@@ -2,8 +2,8 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 9.5.2
--- Dumped by pg_dump version 9.5.2
+-- Dumped from database version 9.5.1
+-- Dumped by pg_dump version 9.5.1
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -301,9 +301,9 @@ COPY interactions (interaction_id, contact_id, user_id, date, frienergy, t_delta
 23	18	1	2016-05-04	4	0
 36	19	1	2016-05-09	2	0
 48	10	1	2016-05-11	4	1
-49	21	1	2016-05-11	7	\N
 50	21	1	2016-05-12	3	1
 51	1	1	2016-05-12	1	6
+49	21	1	2016-05-11	7	0
 \.
 
 
