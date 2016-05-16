@@ -2,8 +2,8 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 9.5.1
--- Dumped by pg_dump version 9.5.1
+-- Dumped from database version 9.5.2
+-- Dumped by pg_dump version 9.5.2
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -219,26 +219,26 @@ ALTER TABLE ONLY users ALTER COLUMN user_id SET DEFAULT nextval('users_user_id_s
 --
 
 COPY contacts (user_id, contact_id, first_name, last_name, email, cell_phone, street, city, state, zipcode, total_frienergy, avg_t_btwn_ints, t_since_last_int) FROM stdin;
-1	2	Christina	Clarkin	cristinamclarkin@gmail.com	201-887-1119					8	0	0
-1	3	Katie 	Lundsgard	katie.lundsgaard@gmail.com						5	0	0
-1	4	Katie	Simmons	katie@katie.codes	651-361-0974					9	0	0
-1	5	Sarah	Flemming	sajafleming@gmail.com	314-750-4493					7	0	0
-1	6	Veronica	Erik	veronica@ellenblakeley.com	707-696-0691					7	0	0
-1	7	Christina	Feeny	christina@feenys.net	650-380-0666	607 Mountain Home Rd	Woodside	CA	94062	37	5.1111111109999996	0
-1	8	Daniel	Feeny			607 Mountain Home Rd	Woodside	CA	94062	7	15.3333333300000003	0
-1	9	Curtis	Feeny	curtis@feenys.net		607 Mountain Home Rd	Woodside	CA	94062	21	9.19999999999999929	0
-1	11	Hilary	Jones	hilarypjones@yahoo.com	650-326-8232	235 Walter Hays Dr.	Palo Alto	CA	94303	6	8	0
-1	12	Kristine	Chou		808-342-1680					1	0	0
-1	13	Chuck	Bonnici		415-860-9344					61	5.42857142899999978	0
-1	14	Sam	Nelson		415-342-2284					10	0	0
-1	15	Stephanie	Simon		631-238-5362					0	0	0
-1	16	Jon								0	0	0
-1	17	Karl	Gummerlock		650-704-6324					51	8.5	0
-1	18	Lizzy	Gilman							4	0	0
-1	19	Nathan	Walker							2	0	0
-1	10	Jaime	Lyon	lyon.jaime@gmail.com	510-725-2135	235 Walter Hays Dr.	Palo Alto	CA	94303	13	1	0
-1	21	Aisling	Dempsey	aisling.n.dempsey@gmail.com	415-470-3073		San Francisco	CA		10	1	0
-1	1	Anna	Kiefer	annakiefer12@gmail.com	301-536-3989					9	6	0
+1	1	Anna	Kiefer	annakiefer12@gmail.com	301-536-3989					12	3.5	2
+1	2	Christina	Clarkin	cristinamclarkin@gmail.com	201-887-1119					8	0	9
+1	3	Katie 	Lundsgard	katie.lundsgaard@gmail.com						5	0	9
+1	4	Katie	Simmons	katie@katie.codes	651-361-0974					18	8	2
+1	5	Sarah	Flemming	sajafleming@gmail.com	314-750-4493					7	0	9
+1	6	Veronica	Erik	veronica@ellenblakeley.com	707-696-0691					7	0	9
+1	7	Christina	Feeny	christina@feenys.net	650-380-0666	607 Mountain Home Rd	Woodside	CA	94062	37	5.1111111109999996	4
+1	8	Daniel	Feeny			607 Mountain Home Rd	Woodside	CA	94062	7	15.3333333300000003	4
+1	9	Curtis	Feeny	curtis@feenys.net		607 Mountain Home Rd	Woodside	CA	94062	21	9.19999999999999929	4
+1	11	Hilary	Jones	hilarypjones@yahoo.com	650-326-8232	235 Walter Hays Dr.	Palo Alto	CA	94303	6	8	5
+1	12	Kristine	Chou		808-342-1680					2	3	2
+1	14	Sam	Nelson		415-342-2284					10	0	9
+1	17	Karl	Gummerlock		650-704-6324					51	8.5	5
+1	18	Lizzy	Gilman							4	0	11
+1	23	Joyce	Lin							8	0	2
+1	24	Maggie	Yang							7	0	2
+1	13	Chuck	Bonnici		415-860-9344					63	5.375	0
+1	22	Veronica 	Erik							0	0	-1
+1	10	Jaime	Lyon	lyon.jaime@gmail.com	510-725-2135	235 Walter Hays Dr.	Palo Alto		94303	16	1.75	0
+1	21	Aisling	Dempsey	aisling.n.dempsey@gmail.com	415-470-3073		San Francisco			15	1	2
 \.
 
 
@@ -246,7 +246,7 @@ COPY contacts (user_id, contact_id, first_name, last_name, email, cell_phone, st
 -- Name: contacts_contact_id_seq; Type: SEQUENCE SET; Schema: public; Owner: alyon
 --
 
-SELECT pg_catalog.setval('contacts_contact_id_seq', 21, true);
+SELECT pg_catalog.setval('contacts_contact_id_seq', 24, true);
 
 
 --
@@ -299,11 +299,18 @@ COPY interactions (interaction_id, contact_id, user_id, date, frienergy, t_delta
 22	17	1	2016-05-02	3	9
 42	17	1	2016-05-10	3	8
 23	18	1	2016-05-04	4	0
-36	19	1	2016-05-09	2	0
 48	10	1	2016-05-11	4	1
 50	21	1	2016-05-12	3	1
 51	1	1	2016-05-12	1	6
+52	12	1	2016-05-13	1	3
+53	4	1	2016-05-13	9	8
 49	21	1	2016-05-11	7	0
+54	21	1	2016-05-13	5	1
+55	1	1	2016-05-13	3	1
+56	23	1	2016-05-13	8	0
+57	24	1	2016-05-13	7	0
+58	13	1	2016-05-15	2	5
+59	10	1	2016-05-15	3	4
 \.
 
 
@@ -311,7 +318,7 @@ COPY interactions (interaction_id, contact_id, user_id, date, frienergy, t_delta
 -- Name: interactions_interaction_id_seq; Type: SEQUENCE SET; Schema: public; Owner: alyon
 --
 
-SELECT pg_catalog.setval('interactions_interaction_id_seq', 51, true);
+SELECT pg_catalog.setval('interactions_interaction_id_seq', 59, true);
 
 
 --
@@ -325,6 +332,14 @@ COPY notes (note_id, contact_id, interaction_id, text) FROM stdin;
 5	21	49	text
 6	21	50	
 7	1	51	
+8	12	52	
+9	4	53	
+10	21	54	
+11	1	55	
+12	23	56	
+13	24	57	
+14	13	58	
+15	10	59	
 \.
 
 
@@ -332,7 +347,7 @@ COPY notes (note_id, contact_id, interaction_id, text) FROM stdin;
 -- Name: notes_note_id_seq; Type: SEQUENCE SET; Schema: public; Owner: alyon
 --
 
-SELECT pg_catalog.setval('notes_note_id_seq', 7, true);
+SELECT pg_catalog.setval('notes_note_id_seq', 15, true);
 
 
 --
