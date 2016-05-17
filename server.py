@@ -270,20 +270,22 @@ def add_interaction():
     date = request.form.get('date')
     date = datetime.datetime.strptime(date, '%Y-%m-%d').date()
 
-# FIXME #can't instantiate interaction unless Note obj exists as list object.
-# How can I do this and pass "None" when creating an interaction instance?
-    # gets note as string and converts to note object
-    text = request.form.get('notes')
-    new_note = Note(contact_id=contact_id,
-                    text=text)
-
     # creates an interaction instance for the contact and adds it to the db
     new_interaction = Interaction(user_id=user_id,
                                   contact_id=contact_id,
                                   date=date,
-                                  frienergy=frienergy,
-                                  note=[new_note])
+                                  frienergy=frienergy)
     db.session.add(new_interaction)
+    db.session.flush()
+
+    # gets note as string and converts to note object
+    text = request.form.get('notes')
+    if text:
+        new_note = Note(contact_id=contact_id,
+                        interaction_id=new_interaction.interaction_id,
+                        text=text)
+        db.session.add(new_note)
+
     db.session.commit()
 
     # calculates the *Interaction* attributes (plural): time since last interaction
@@ -301,6 +303,115 @@ def add_interaction():
     return redirect("/dashboard/"+str(user_id))
 
 
+@app.route('/getInteraction.json', methods=['POST'])
+def get_interaction():
+    """gets interaction information from db for edit interaction form"""
+
+    # retrieves existing contact object from db
+    interaction_id = int(request.form.get('id'))
+    i = Interaction.query.get(interaction_id)
+
+    # formates datetime date object to be readable by json
+    date_string = i.date.strftime('%Y-%m-%d')
+
+    # gets contact name for form
+    c = Contact.query.get(i.contact_id)
+    contact_name = c.first_name + " " + c.last_name
+
+    # pulls text of note, if note was created
+    if i.note:
+        note_text = i.note.text
+        note_id = i.note.note_id
+    else:
+        note_text = ""
+        note_id = None
+
+    # creates a dictionary of contact info to pass through JSON to HTML script
+    interaction_info = {
+        'interactionId': interaction_id,
+        'contactName': contact_name,
+        'date': date_string,
+        'frienergy': i.frienergy,
+        'noteId': note_id,
+        'noteText': note_text,
+    }
+
+    return jsonify(interaction_info)
+
+@app.route('/editInteraction', methods=['POST'])
+def edit_interaction():
+    """updates an interaction"""
+
+    # gets interaction object from edit-interaction form
+    interaction_id = int(request.form.get('interaction-id'))
+    i = Interaction.query.get(interaction_id)
+
+    # gets and formats interaction date
+    date = request.form.get('date')
+
+    # updates interaction attributes and commits changes to db
+    i.frienergy = request.form.get('frienergy')
+    i.date = date
+
+    # gets note as string
+    # if previous note, updates text attr, otherwise, creates new note
+    text = request.form.get('notes')
+    note_id = request.form.get('note-id')
+    if note_id:
+        note = Note.query.get(note_id)
+        note.text = text
+    else:
+        note = Note(contact_id=i.contact_id,
+                    interaction_id=interaction_id,
+                    text=text)
+        db.session.add(note)
+
+    db.session.commit()
+
+    flash("Interaction successfully updated.")
+
+    # redirects to user's dashboard
+    user_id = session['logged_in_user_id']
+    return redirect("/dashboard/"+str(user_id))
+
+
+@app.route('/deleteInteraction', methods=['POST'])
+def delete_interaction():
+    """deletes an interaction from the db"""
+
+    # gets interaction object from edit-interaction form
+    interaction_id = int(request.form.get('interaction-id'))
+    i = Interaction.query.get(interaction_id)
+
+    # deletes note corresponding to interaction
+    if i.note:
+        db.session.delete(Note.query.get(interaction_id))
+    
+    # deletes interaction object from db
+    db.session.delete(Interaction.query.get(interaction_id))
+    db.session.commit()
+
+    flash("Interaction successfully deleted.")
+
+    # redirects to user's dashboard
+    user_id = session['logged_in_user_id']
+    return redirect("/dashboard/"+str(user_id))
+
+
+@app.route('/getNote.json', methods=['GET'])
+def get_note():
+    """retreives note text from db"""
+
+    interaction_id = request.args.get('id')
+    interaction = Interaction.query.get(interaction_id)
+    note = interaction.note
+    text = note.text
+
+    print text 
+
+    return text
+
+
 ################################################################################
 # Calculate reminders
 @app.route('/getReminders.json', methods=['POST'])
@@ -312,17 +423,18 @@ def calculate_reminders():
 
     reminders = {}
 
-    contacts = db.session.query(Contact).filter(Contact.user_id == user_id)
+    contacts = db.session.query(Contact).filter(Contact.user_id == user_id).all()
     for c in contacts:
         update_t_since_last_int(c.contact_id)
         interactions = db.session.query(Interaction).filter(Interaction.contact_id == c.contact_id).all()
-        days_overdue = c.t_since_last_int - c.avg_t_btwn_ints
+        days_overdue = round(c.t_since_last_int - c.avg_t_btwn_ints, 0)
         if (days_overdue > 0) and len(interactions) > 2:
             reminders[c.contact_id] = {
                 'first_name': c.first_name,
                 'last_name': c.last_name,
                 'days_overdue': days_overdue
             }
+    print "\n\n\nreminders: ", reminders, "\n\n\n"
 
     return jsonify(reminders)
 

@@ -2,8 +2,8 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 9.5.2
--- Dumped by pg_dump version 9.5.2
+-- Dumped from database version 9.5.1
+-- Dumped by pg_dump version 9.5.1
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -238,7 +238,8 @@ COPY contacts (user_id, contact_id, first_name, last_name, email, cell_phone, st
 1	13	Chuck	Bonnici		415-860-9344					63	5.375	0
 1	22	Veronica 	Erik							0	0	-1
 1	10	Jaime	Lyon	lyon.jaime@gmail.com	510-725-2135	235 Walter Hays Dr.	Palo Alto		94303	16	1.75	0
-1	21	Aisling	Dempsey	aisling.n.dempsey@gmail.com	415-470-3073		San Francisco			15	1	2
+1	21	Aisling	Dempsey	aisling.n.dempsey@gmail.com	415-470-3073		San Francisco			16	1.66666666666666674	0
+1	25	Inas	Hyatt	inas.raheema@gmail.com						5	3	0
 \.
 
 
@@ -246,7 +247,7 @@ COPY contacts (user_id, contact_id, first_name, last_name, email, cell_phone, st
 -- Name: contacts_contact_id_seq; Type: SEQUENCE SET; Schema: public; Owner: alyon
 --
 
-SELECT pg_catalog.setval('contacts_contact_id_seq', 24, true);
+SELECT pg_catalog.setval('contacts_contact_id_seq', 25, true);
 
 
 --
@@ -311,6 +312,9 @@ COPY interactions (interaction_id, contact_id, user_id, date, frienergy, t_delta
 57	24	1	2016-05-13	7	0
 58	13	1	2016-05-15	2	5
 59	10	1	2016-05-15	3	4
+60	21	1	2016-05-16	1	3
+61	25	1	2016-05-16	3	3
+62	25	1	2016-05-13	2	0
 \.
 
 
@@ -318,7 +322,7 @@ COPY interactions (interaction_id, contact_id, user_id, date, frienergy, t_delta
 -- Name: interactions_interaction_id_seq; Type: SEQUENCE SET; Schema: public; Owner: alyon
 --
 
-SELECT pg_catalog.setval('interactions_interaction_id_seq', 59, true);
+SELECT pg_catalog.setval('interactions_interaction_id_seq', 62, true);
 
 
 --
@@ -330,16 +334,6 @@ COPY notes (note_id, contact_id, interaction_id, text) FROM stdin;
 2	14	30	Listened to me vent on phone for 30 minutes
 4	10	48	text
 5	21	49	text
-6	21	50	
-7	1	51	
-8	12	52	
-9	4	53	
-10	21	54	
-11	1	55	
-12	23	56	
-13	24	57	
-14	13	58	
-15	10	59	
 \.
 
 

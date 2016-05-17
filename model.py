@@ -96,14 +96,17 @@ class Interaction(db.Model):
                      nullable=False)
     frienergy = db.Column(db.Integer,
                           nullable=False)
+    t_delta_since_last_int = db.Column(db.Integer,
+                                       nullable=True)
+
+    # establishes relationships with user, contact, and note tables
     user = db.relationship("User",
                            backref=db.backref("interactions", order_by=interaction_id))
     contact = db.relationship("Contact",
                               backref=db.backref("interactions", order_by=interaction_id))
     note = db.relationship("Note",
-                           backref=db.backref("interactions", order_by=interaction_id))
-    t_delta_since_last_int = db.Column(db.Integer,
-                                       nullable=True)
+                           backref=db.backref("interaction"), uselist=False)
+    
 
     def __repr__(self):
         """Provide helpful representation when printed."""

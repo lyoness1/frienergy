@@ -1,4 +1,3 @@
-// <script type="text/javascript">
 
 // fades flash message after three seconds 
 setTimeout(
@@ -15,7 +14,6 @@ setInterval(function(){
     $("#show-date").text(t);
 }, 1000);
 
-
 // populates the add interaction modal with contact's name and id data
 function getContact(evt) {
     var contactName = $(this).data('name');
@@ -26,6 +24,8 @@ function getContact(evt) {
 
 $('.add-int').on('click', getContact);
 
+
+// DISPLAY RELATIONSHIP FOR SPECIFIC CONTACT
 // displays interesting metrics about a specific relationship
 function displayRelationshipData(data) {
     var name = data.first_name + " " + data.last_name;
@@ -51,8 +51,9 @@ function getRelationship(evt) {
 
 $('.relationship-link').on('click', getRelationship);
 
+// EDIT CONTACT
 // populates edit contact form with current contact information from db
-function populateForm(data) {
+function populateContactForm(data) {
     $('#prepopulate-contact-id').val(data.contact_id);
     $('#prepopulate-first-name').val(data.first_name);
     $('#prepopulate-last-name').val(data.last_name);
@@ -69,9 +70,40 @@ function getContactData(evt) {
     evt.preventDefault();
     // gets contact id from form
     var contactId = $(this).data('contact-id');
-    $.post('/getContact.json', {'id': contactId}, populateForm);
+    $.post('/getContact.json', {'id': contactId}, populateContactForm);
 }
 
 $('.edit-contact').on('click', getContactData);
 
-// </script>
+
+// EDIT INTERACTION
+// prepopulates the edit-interaction form
+function populateIntForm(data) {
+    $('#prepopulate-int-id').val(data.interactionId);
+    $('#prepopulate-note-id').val(data.noteId);
+    $('#prepopulate-contact-name').text(data.contactName);
+    $('#prepopulate-date').val(data.date);
+    $('#prepopulate-frienergy').val(data.frienergy);
+    $('#prepopulate-note').val(data.noteText);
+}
+
+// gets interaction info from server before showing edit interaction form
+function getInteractionData(evt) {
+    evt.preventDefault();
+    var interactionId = $(this).data('int-id');
+    $.post('/getInteraction.json', {'id': interactionId}, populateIntForm);
+}
+
+$('.interaction-link').on('click', getInteractionData);
+
+
+// NOTE POPOVER
+
+$('.note-popover').click( function (evt) {
+    var interactionId = $(this).data('id');
+    $.get('/getNote.json', {'id': interactionId}, function (data) {
+        $('a[data-id=' + interactionId + ']').popover({content: data}).popover('toggle');
+    });
+});
+
+
