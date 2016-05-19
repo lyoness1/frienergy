@@ -29,14 +29,26 @@ $('.add-int').on('click', getContact);
 // displays interesting metrics about a specific relationship
 function displayRelationshipData(data) {
     var name = data.first_name + " " + data.last_name;
+
     if (data.street) {
         var address = (data.street + ", " + data.city + ", " +data.state + " " + data.zipcode);
         $('#address.relationship').text(address);
     }
+
+
+    // populate contact contact information
     $('#name.relationship').text(name);
     $('#email.relationship').text(data.email);
     $('#cell-phone.relationship').text(data.cell_phone);
-    $('#frienergy.relationship').text(data.total_frienergy);
+
+    // populate relationship frienergy stats
+    $('#total-ints.relationship').text("Total interactions: " + data.total_interactions);
+    $('#total-frienergy.relationship').text("Total frienergy: " + data.total_frienergy);
+    $('#avg-power.relationship').text("Average frienergy per day: " + data.avg_power);
+    $('#avg-t-btwn-ints.relationship').text("Average time between interactions: " + data.avg_t_btwn_ints);
+    $('#t-since-last-int.relationship').text("Time since last interaction: " + data.t_since_last_int);
+    $('#avg-frienergy-each-interaction.relationship').text("Average frienergy per interaction: " + data.avg_frienergy_each_interaction);
+    $('#notes.relationship').text("Notes: " + data.notes);
 }
 
 // populates the contact relationship modal with contact info
@@ -46,6 +58,7 @@ function getRelationship(evt) {
     $('#contact-name-for-relationship').text(contactName);
     $('#contact-id-for-relationship').data('contact-id', contactId);
     evt.preventDefault();
+    console.log(contactId);
     $.post('/getContact.json', {'id': contactId}, displayRelationshipData);
 }
 

@@ -13,8 +13,7 @@
             <div class="panel panel-default">
                 <div class="panel-heading clearfix">
                     <button type="button" class="btn btn-primary btn-sm pull-right" data-toggle="modal" data-target="#profileEditModal">Edit</button>
-                    <h3 class="pull-left">{{ user.first_name }}'s Profile</h3>
-                    <!-- <h4 id="show-date"></h4> -->
+                    <h2 class="pull-left">{{ user.first_name }}'s Profile</h2>
                 </div>
                 <div class="panel-body">
                     <p>Zipcode: {{ user.zipcode }}</p>
@@ -53,11 +52,15 @@
                         <tbody>
                             {% for item in contacts %}
                             <tr class="contact-info">
+
                                 <!-- name is a link to relationship modal -->
                                 <td><a href="" class="relationship-link" data-toggle="modal" data-target="#relationshipModal" data-contact-id="{{ item[3] }}" data-name="{{ item[1] }} {{ item[2] }}">{{ item[1] }} {{ item[2] }}</a></td>
+
                                 <td>{{ item[0] }}</td>
+
                                 <!-- button stores contact name and id -->
                                 <td><button type="button" class="btn btn-primary btn-xs pull-right add-int" data-toggle="modal" data-target="#addInteractionModal" data-name="{{ item[1] }} {{ item[2] }}" data-contact-id="{{ item[3] }}">Add Interaction</button></td>
+
                             </tr>
                             {% endfor %}
                         </tbody>
@@ -153,11 +156,15 @@
 
             <!-- modal header -->
             <div class="modal-header">
+
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+
                 <h4 class="modal-title" id="myModalLabel">Relationship</h4>
+
                 <h5 id="contact-name-for-relationship" class="pull-left"></h5>
-                <!-- FIXME add functionality to edit contact - how to pass data? -->
+
                 <button type="button" id="contact-id-for-relationship" class="btn btn-primary btn-sm pull-right edit-contact" data-toggle="modal" data-dismiss="modal" data-target="#editContactModal">Edit Contact</button>
+
             </div>
 
             <!-- modal body -->
@@ -178,11 +185,19 @@
                             <td class="relationship" id="email"></td>
                             <td class="relationship" id="cell-phone"></td>
                             <td class="relationship" id="address"></td>
-                            <td class="relationship" id="frienergy"></td>
                         </tr>
                     </tbody>
                 </table>
                 
+                <ul>
+                    <li class="relationship" id="total-ints"></li>
+                    <li class="relationship" id="total-frienergy"></li>
+                    <li class="relationship" id="avg-power"></li>
+                    <li class="relationship" id="avg-t-btwn-ints"></li>
+                    <li class="relationship" id="t-since-last-int"></li>
+                    <li class="relationship" id="avg-frienergy-each-interaction"></li>
+                    <li class="relationship" id="notes"></li>
+                </ul>
 
             </div>
 

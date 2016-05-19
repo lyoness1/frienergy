@@ -4,21 +4,9 @@ body {
 }
 
 .modal-header {
-    border-bottom:1px solid #bce8f1;
-    background-color: #d9edf7;
-    color: #31708f;
-    -webkit-border-top-left-radius: 5px;
-    -webkit-border-top-right-radius: 5px;
-    -moz-border-radius-topleft: 5px;
-    -moz-border-radius-topright: 5px;
-     border-top-left-radius: 5px;
-     border-top-right-radius: 5px;
+    background-color: rgba(153, 153, 153, 0.52);
+    color: black;
 }
-
-.panel-body {
-    background-color: #e6e6e6;
-}
-
 
 /*font-family: 'Hind', sans-serif;
 
@@ -29,20 +17,15 @@ font-family: 'Amatic SC', cursive;*/
 /* navbar */
 .navbar-default {
     background-color: #337ab7;
-    border-color: #337ab7;
     border-radius: 0;
     padding: 1em;
 }
 /* title */
 .navbar-default .navbar-brand {
-    color: white;
     font-family: "Fontdiner Swanky", cursive;
     font-size: 3em;
 }
-.navbar-default .navbar-brand:hover,
-.navbar-default .navbar-brand:focus {
-    color: #5E5E5E;
-}
+
 /* link */
 .navbar-default .navbar-nav > li > a {
     color: white;

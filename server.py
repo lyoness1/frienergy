@@ -181,6 +181,16 @@ def get_contact():
     contact_id = request.form.get('id')
     c = Contact.query.get(contact_id)
 
+    all_interactions = db.session.query(Interaction).filter(Interaction.contact_id == contact_id).all()
+    total_interactions = len(all_interactions)
+    avg_power = calculate_power(contact_id)
+    avg_frienergy_per_int = round(sum(i.frienergy for i in all_interactions) / total_interactions, 1)
+    notes = {}
+    for i in all_interactions:
+        if i.note:
+            date = i.date.strftime('%Y-%m-%d')
+            notes[date] = i.note.text
+ 
     # creates a dictionary of contact info to pass through JSON to HTML script
     contact_info = {
         'contact_id': c.contact_id,
@@ -194,7 +204,11 @@ def get_contact():
         'zipcode': c.zipcode,
         'total_frienergy': c.total_frienergy,
         'avg_t_btwn_ints': c.avg_t_btwn_ints,
-        't_delta_since_last_int': c.t_since_last_int
+        't_delta_since_last_int': c.t_since_last_int,
+        'total_interactions': total_interactions,
+        'avg_power': avg_power,
+        'avg_frienergy_each_interaction': avg_frienergy_per_int,
+        'notes': notes,
     }
 
     return jsonify(contact_info)
@@ -434,7 +448,6 @@ def calculate_reminders():
                 'last_name': c.last_name,
                 'days_overdue': days_overdue
             }
-    print "\n\n\nreminders: ", reminders, "\n\n\n"
 
     return jsonify(reminders)
 
