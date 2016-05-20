@@ -6,6 +6,7 @@ from flask import Flask, render_template, redirect, request, flash, session, jso
 from flask_debugtoolbar import DebugToolbarExtension
 
 from model import connect_to_db, db, User, Contact, Interaction, Note
+from helper import *
 
 import datetime
 import json
@@ -23,7 +24,7 @@ app.jinja_env.undefined = StrictUndefined
 
 
 ################################################################################
-# Routes to handle rendering pages
+# Routes to handle RENDERING PAGES
 @app.route('/')
 def index():
     """Homepage."""
@@ -38,39 +39,24 @@ def show_dashboard(user_id):
     # returns the user object to be able to display their profile information
     user = User.query.get(user_id)
 
-    # returns a list of interactions by the current user, newest first
-    user_interactions = db.session.query(Interaction).filter(Interaction.user_id == user_id)
-    user_interactions = sorted(user_interactions, key=lambda i: i.date, reverse=True)
+    # returns a list of tupes for all interactions of user: (interaction, date)
+    # list is sorted with newest interaction first
+    interactions = sort_user_interactions_by_date(user_id)
 
-    # formats the date as a readable string
-    ints_with_dates = []
-    for interaction in user_interactions:
-        date = interaction.date.strftime('%A, %b %d')
-        ints_with_dates.append((interaction, date))
+    # returns a list of lists: [power-%, fname, lname, contact_id]
+    # list is sorted by highest power percentage first
+    contacts = get_and_sort_contacts_by_power(user_id)
 
-    # returns a list of contact objects for the given user
-    user_contacts = db.session.query(Contact).filter(Contact.user_id == user_id)
-
-    # creates a list of tuples to store (power-%, fname, lname, contact_id) and sorts by power
-    contact_powers = []
-    for contact in user_contacts:
-        power = calculate_power(contact.contact_id)
-        contact_powers.append([power, contact.first_name, contact.last_name, contact.contact_id])
-    contact_powers = sorted(contact_powers, reverse=True)
-
-    # calculates power as a percentage of the largest power in the list
-    max_power = contact_powers[0][0]
-    for power in contact_powers:
-        power[0] = (power[0] / max_power) * 100
-
+    # renders the dashboard.html page with user's contact and interaction data
     return render_template("dashboard.html",
                            user=user,
-                           interactions=ints_with_dates,
-                           contacts=contact_powers)
+                           interactions=interactions,
+                           contacts=contacts)
 
 
 ################################################################################
-# Routes to handle login and logout
+# Routes to handle LOGIN and LOGOUT
+
 @app.route('/login', methods=["POST"])
 def login():
     """Handles user login"""
@@ -78,8 +64,10 @@ def login():
     # gets email and password from the form
     email = request.form.get('email')
     password = request.form.get('password')
+
     # gets a user object from the database by email
     db_user = db.session.query(User).filter(User.email == email).first()
+
     # handles login of existing user
     if db_user:
         if password == db_user.password:
@@ -113,6 +101,7 @@ def register():
     email = request.form.get('email')
     zipcode = request.form.get('zipcode')
     password = request.form.get('password')
+
     # creates an instance for the user in the db with the gathered information
     new_user = User(first_name=first_name,
                     last_name=last_name,
@@ -121,9 +110,12 @@ def register():
                     password=password)
     db.session.add(new_user)
     db.session.commit()
+
+    # adds user information to the session for use later
     session['logged_in_email'] = email
     session['logged_in_user_id'] = new_user.user_id
     session['logged_in_user_name'] = new_user.first_name
+
     flash("You have Successfully registred! You are now logged in.")
     return redirect("/dashboard/"+str(new_user.user_id))
 
@@ -186,7 +178,8 @@ def edit_profile():
 
 
 ################################################################################
-# Routes to handle adding/deleting/editing contacts and interactions
+# Routes to handle adding/deleting/editing CONTACTS 
+
 @app.route('/addContact', methods=['POST'])
 def add_contact():
     """Adds a contact to the db"""
@@ -234,7 +227,8 @@ def get_contact():
     c = Contact.query.get(contact_id)
 
     # calculates interesting metrics for a relationship's health 
-    all_interactions = db.session.query(Interaction).filter(Interaction.contact_id == contact_id).all()
+    all_interactions = db.session.query(Interaction).filter(Interaction
+                                        .contact_id == contact_id).all()
     total_interactions = len(all_interactions)
     avg_power = calculate_power(contact_id)
     avg_frienergy_per_int = round(sum(i.frienergy for i in all_interactions) / total_interactions, 1)
@@ -323,6 +317,8 @@ def delete_contact():
     user_id = session['logged_in_user_id']
     return redirect("/dashboard/"+str(user_id))
 
+################################################################################
+# Routes to handle adding/deleting/editing and INTERACTIONS
 
 @app.route('/addInteraction', methods=['POST'])
 def add_interaction():
@@ -466,6 +462,8 @@ def delete_interaction():
     user_id = session['logged_in_user_id']
     return redirect("/dashboard/"+str(user_id))
 
+################################################################################
+# Routes to handle NOTES 
 
 @app.route('/getNote.json', methods=['GET'])
 def get_note():
@@ -482,7 +480,8 @@ def get_note():
 
 
 ################################################################################
-# Calculate reminders
+# routes to get and post REMINDERS
+
 @app.route('/getReminders.json', methods=['POST'])
 def calculate_reminders():
     """calculates reminders to show"""
@@ -508,113 +507,6 @@ def calculate_reminders():
             }
 
     return jsonify(reminders)
-
-
-
-################################################################################
-# Helper functions
-def calculate_t_delta_since_last_int(contact_id):
-    """updates the *Interaction* attributes (plural): time since last interaction"""
-
-    # returns a list of all interactions on contact sorted by date, oldest first
-    int_list = db.session.query(Interaction).filter(Interaction.contact_id == contact_id).all()
-    int_list = sorted(int_list, key=lambda i: i.date)
-
-    # calculates time between each interaction and reassigns attribute.
-    if len(int_list) > 1:
-        for n in range(1, len(int_list)):
-            delta = int_list[n].date - int_list[n-1].date
-            int_list[n].t_delta_since_last_int = abs(int(delta.days))
-    int_list[0].t_delta_since_last_int = 0
-
-    # commit changes to db
-    db.session.commit()
-
-
-def update_t_since_last_int(contact_id):
-    """calculates the *Contact* attribute (singular): time since last interaction"""
-
-    # gets contact object from their id
-    contact = Contact.query.get(contact_id)
-
-    # gets a datetime date object for today
-    today = datetime.date.today()
-
-    # sorts the list of interactions for the contact by date, newest first
-    int_list = sorted(contact.interactions, key=lambda i: i.date, reverse=True)
-
-    # updates the attribute by subtracting dates and converting to integer
-    if int_list:
-        delta = int_list[0].date - today
-        delta = delta.days
-        contact.t_since_last_int = abs(delta)
-    else:
-        contact.t_since_last_int = -1
-
-    # commit calculation to database
-    db.session.commit()
-
-
-def update_total_frienergy(contact_id):
-    """updates contact attributes: total_frienergy, avg_t_btwn_ints, and t_since_last_int"""
-
-    # gets contact object from their id
-    contact = Contact.query.get(contact_id)
-
-    # calculates total frienergy for the contact by looping through int objs
-    total_frienergy = 0
-    interactions = contact.interactions
-    for i in interactions:
-        total_frienergy += i.frienergy
-
-    # sets the attribute to the contact in the db
-    contact.total_frienergy = float(total_frienergy)
-
-    # commit changes to db
-    db.session.commit()
-
-
-def update_avg_t_btwn_ints(contact_id):
-    """calculates average time between interactions for contact"""
-
-    # gets contact object from their id
-    contact = Contact.query.get(contact_id)
-
-    # makes a list of contact's interactions, sorted with oldest int first
-    int_list = contact.interactions
-    int_list = sorted(int_list, key=lambda i: i.date)
-
-    # makes a list to store all the time deltas between interactions
-    deltas = []
-
-    # calculates the average of the time deltas
-    # if only one interaction, avg time delta is 0
-    for i in int_list[1:]:
-        deltas.append(i.t_delta_since_last_int)
-    if deltas:
-        contact.avg_t_btwn_ints = float(sum(deltas)) / (len(deltas))
-    else:
-        contact.avg_t_btwn_ints = 0
-
-    # commit changes to db
-    db.session.commit()
-
-
-def calculate_power(contact_id):
-    """calculates the power of a friendship as (total frienergy)/(avg interaction time-delta)"""
-
-    # gets contact object from their id
-    contact = Contact.query.get(contact_id)
-
-    # gets current attributes of total frienergy and avg time delta between ints
-    frienergy = contact.total_frienergy
-    avg_t_btwn_ints = contact.avg_t_btwn_ints
-
-    # calcualtes and returns relationship power
-    if avg_t_btwn_ints != 0:
-        return round(frienergy / avg_t_btwn_ints, 1)
-    else:
-        return 0
 
 
 ################################################################################
