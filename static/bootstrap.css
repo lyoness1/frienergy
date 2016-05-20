@@ -5434,6 +5434,10 @@ button.list-group-item-danger.active:focus {
 .panel-body {
   padding: 15px;
 }
+.panel-fixed {
+  height: 400px;
+  overflow-y: scroll;
+}
 .panel-heading {
   padding: 10px 15px;
   border-bottom: 1px solid transparent;

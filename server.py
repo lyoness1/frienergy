@@ -42,19 +42,29 @@ def show_dashboard(user_id):
     user_interactions = db.session.query(Interaction).filter(Interaction.user_id == user_id)
     user_interactions = sorted(user_interactions, key=lambda i: i.date, reverse=True)
 
+    ints_with_dates = []
+    for interaction in user_interactions:
+        date = interaction.date.strftime('%A, %b %d')
+        ints_with_dates.append((interaction, date))
+
     # returns a list of contact objects for the given user
     user_contacts = db.session.query(Contact).filter(Contact.user_id == user_id)
 
-    # creates a list of tuples to store (power, fname, lname, contact_id) and sorts by power
+    # creates a list of tuples to store (power-%, fname, lname, contact_id) and sorts by power
     contact_powers = []
     for contact in user_contacts:
         power = calculate_power(contact.contact_id)
-        contact_powers.append((power, contact.first_name, contact.last_name, contact.contact_id))
+        contact_powers.append([power, contact.first_name, contact.last_name, contact.contact_id])
     contact_powers = sorted(contact_powers, reverse=True)
+
+    # calculates power as a percentage of the largest power in the list
+    max_power = contact_powers[0][0]
+    for power in contact_powers:
+        power[0] = (power[0] / max_power) * 100
 
     return render_template("dashboard.html",
                            user=user,
-                           interactions=user_interactions,
+                           interactions=ints_with_dates,
                            contacts=contact_powers)
 
 
@@ -131,6 +141,47 @@ def logout():
 
     # routes to homepage
     return redirect("/")
+
+
+@app.route('/getUser.json', methods=['GET'])
+def get_user():
+    """gets the logged in user's information to prepopulate edit profile form"""
+
+    # gets current user from session
+    user_id = session['logged_in_user_id']
+    user = User.query.get(user_id)
+
+    # creates a dictionary to send to prepopulate edit profile modal form
+    user_info = {
+        'first_name': user.first_name,
+        'last_name': user.last_name,
+        'email': user.email,
+        'zipcode': user.zipcode,
+    }
+
+    return jsonify(user_info)
+
+
+@app.route('/editProfile', methods=['POST'])
+def edit_profile():
+    """updates the profile information of the logged in user"""
+
+    # gets current user from session
+    user_id = session['logged_in_user_id']
+    user = User.query.get(user_id)
+
+    user.first_name = request.form.get('first-name')
+    user.last_name = request.form.get('last-name')
+    user.email = request.form.get('email')
+    user.zipcode = request.form.get('zipcode')
+    user.password = request.form.get('password')
+
+    # gives user feedback on their logout action
+    flash("You have successfully updated your profile information.")
+
+    # routes to homepage
+    return redirect("/dashboard/"+str(user_id))
+
 
 
 ################################################################################

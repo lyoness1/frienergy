@@ -1,18 +1,9 @@
 
-// fades flash message after three seconds 
+// fades flash message after four seconds 
 setTimeout(
     function() {
         $('.alert').fadeOut('fast');
     }, 4000);
-
-// displays current date
-setInterval(function(){
-    var d = new Date();
-    var days = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
-    var day = days[d.getDay()];
-    var t = day + ", " + d.toLocaleDateString();
-    $("#show-date").text(t);
-}, 1000);
 
 // populates the add interaction modal with contact's name and id data
 function getContact(evt) {
@@ -23,6 +14,20 @@ function getContact(evt) {
 }
 
 $('.add-int').on('click', getContact);
+
+
+// UPDATE PROFILE MODAL
+$('#edit-profile-button').click(function (evt) {
+    evt.preventDefault();
+    $.get('/getUser.json', function (data) {
+        var fullName = data.first_name + " " + data.last_name;
+        $('#user-name.prepopulate').text(fullName);
+        $('#first-name.prepopulate').val(data.first_name);
+        $('#last-name.prepopulate').val(data.last_name);
+        $('#email.prepopulate').val(data.email);
+        $('#zipcode.prepopulate').val(data.zipcode);
+    });
+});
 
 
 // DISPLAY RELATIONSHIP FOR SPECIFIC CONTACT
@@ -58,7 +63,6 @@ function getRelationship(evt) {
     $('#contact-name-for-relationship').text(contactName);
     $('#contact-id-for-relationship').data('contact-id', contactId);
     evt.preventDefault();
-    console.log(contactId);
     $.post('/getContact.json', {'id': contactId}, displayRelationshipData);
 }
 
@@ -111,7 +115,6 @@ $('.interaction-link').on('click', getInteractionData);
 
 
 // NOTE POPOVER
-
 $('.note-popover').click( function (evt) {
     var interactionId = $(this).data('id');
     $.get('/getNote.json', {'id': interactionId}, function (data) {
