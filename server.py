@@ -42,6 +42,7 @@ def show_dashboard(user_id):
     user_interactions = db.session.query(Interaction).filter(Interaction.user_id == user_id)
     user_interactions = sorted(user_interactions, key=lambda i: i.date, reverse=True)
 
+    # formats the date as a readable string
     ints_with_dates = []
     for interaction in user_interactions:
         date = interaction.date.strftime('%A, %b %d')
@@ -232,10 +233,13 @@ def get_contact():
     contact_id = request.form.get('id')
     c = Contact.query.get(contact_id)
 
+    # calculates interesting metrics for a relationship's health 
     all_interactions = db.session.query(Interaction).filter(Interaction.contact_id == contact_id).all()
     total_interactions = len(all_interactions)
     avg_power = calculate_power(contact_id)
     avg_frienergy_per_int = round(sum(i.frienergy for i in all_interactions) / total_interactions, 1)
+    
+    # gets all notes for a particular contact 
     notes = {}
     for i in all_interactions:
         if i.note:
@@ -486,8 +490,11 @@ def calculate_reminders():
     # gets current user's id from session
     user_id = session['logged_in_user_id']
 
+    # initializes a dictionary to store reminder information to pass to html
     reminders = {}
 
+    # calculates which contacts are overdue for an interaction for a user
+    # appents contact names and days overdue to a dictionary to pass to html
     contacts = db.session.query(Contact).filter(Contact.user_id == user_id).all()
     for c in contacts:
         update_t_since_last_int(c.contact_id)
