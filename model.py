@@ -120,11 +120,75 @@ class Interaction(db.Model):
 ##############################################################################
 # Helper functions
 
-def connect_to_db(app):
+def example_data():
+    """Create some sample data for use with testing."""
+
+    # In case this is run more than once, empty out existing data
+    User.query.delete()
+    Contact.query.delete()
+    Interaction.query.delete()
+    Note.query.delete()
+
+    # Add a fake user
+    u1 = User(first_name="First",
+              last_name="Last",
+              email="email@domain.com",
+              password="password")
+    db.session.add(u1)
+    db.session.commit()
+
+    # Add some fake contacts
+    c1 = Contact(user_id=u1.user_id,
+                 first_name="First_1",
+                 total_frienergy=24,
+                 avg_t_btwn_ints=3,
+                 t_since_last_int=5)
+
+    c2 = Contact(user_id=u1.user_id,
+                 first_name="First_2",
+                 total_frienergy=15,
+                 avg_t_btwn_ints=8,
+                 t_since_last_int=5)
+
+    db.session.add_all([c1, c2])
+    db.session.commit()
+
+    # Add some fake interactions
+    i3 = Interaction(contact_id=c1.contact_id,
+                     user_id=u1.user_id,
+                     date=datetime.date(2016, 5, 20),
+                     frienergy=10,
+                     t_delta_since_last_int=3)
+
+    i2 = Interaction(contact_id=c1.contact_id,
+                     user_id=u1.user_id,
+                     date=datetime.date(2016, 5, 17),
+                     frienergy=10,
+                     t_delta_since_last_int=3)
+
+    i1 = Interaction(contact_id=c1.contact_id,
+                     user_id=u1.user_id,
+                     date=datetime.date(2016, 5, 14),
+                     frienergy=4,
+                     t_delta_since_last_int=0)
+
+    db.session.add_all([i1, i2, i3])
+    db.session.commit()
+
+    # Add a fake Note
+    n = Note(contact_id=c1.contact_id,
+             interaction_id=i1.interaction_id,
+             text="This is a test note")
+
+    db.session.add(n)
+    db.session.commit()
+
+
+def connect_to_db(app, db_uri="postgresql:///frienergy"):
     """Connect the database to this Flask app."""
 
     # Configure to use the PstgreSQL database
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///frienergy'
+    app.config['SQLALCHEMY_DATABASE_URI'] = db_uri
     db.app = app
     db.init_app(app)
 
