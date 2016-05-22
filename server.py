@@ -178,7 +178,7 @@ def edit_profile():
 
 
 ################################################################################
-# Routes to handle adding/deleting/editing CONTACTS 
+# Routes to handle adding/deleting/editing CONTACTS
 
 @app.route('/addContact', methods=['POST'])
 def add_contact():
@@ -226,20 +226,20 @@ def get_contact():
     contact_id = request.form.get('id')
     c = Contact.query.get(contact_id)
 
-    # calculates interesting metrics for a relationship's health 
+    # calculates interesting metrics for a relationship's health
     all_interactions = db.session.query(Interaction).filter(Interaction
                                         .contact_id == contact_id).all()
     total_interactions = len(all_interactions)
     avg_power = calculate_power(contact_id)
     avg_frienergy_per_int = round(sum(i.frienergy for i in all_interactions) / total_interactions, 1)
-    
-    # gets all notes for a particular contact 
+
+    # gets all notes for a particular contact
     notes = {}
     for i in all_interactions:
         if i.note:
             date = i.date.strftime('%Y-%m-%d')
             notes[date] = i.note.text
- 
+
     # creates a dictionary of contact info to pass through JSON to HTML script
     contact_info = {
         'contact_id': c.contact_id,

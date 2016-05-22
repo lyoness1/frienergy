@@ -32,7 +32,7 @@ def get_and_sort_contacts_by_power(user_id):
 
     # creates a list of tuples to store (power-%, fname, lname, contact_id) and sorts by power
     contact_powers = []
-    if user_contacts: 
+    if user_contacts:
         for contact in user_contacts:
             power = calculate_power(contact.contact_id)
             contact_powers.append([power, contact.first_name, contact.last_name, contact.contact_id])
@@ -148,4 +148,3 @@ def calculate_power(contact_id):
         return round(frienergy / avg_t_btwn_ints, 1)
     else:
         return 0
-

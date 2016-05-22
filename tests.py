@@ -1,8 +1,8 @@
 import json
 from unittest import TestCase
 from model import connect_to_db, db, User, Interaction, Contact, Note, example_data
-from server import app
 import server
+import helper
 import datetime
 
 class FlaskTestsDatabase(TestCase):
@@ -12,12 +12,12 @@ class FlaskTestsDatabase(TestCase):
         """Stuff to do before every test."""
 
         # Get the Flask test client
-        self.client = app.test_client()
-        app.config['TESTING'] = True
-        app.secret_key = "ABC"
+        self.client = server.app.test_client()
+        server.app.config['TESTING'] = True
+        server.app.secret_key = "ABC"
 
         # Connect to test database
-        connect_to_db(app, "postgresql:///testdb")
+        connect_to_db(server.app, "postgresql:///testdb")
 
         # Create tables and add sample data
         db.create_all()
@@ -221,6 +221,58 @@ class FlaskTestsDatabase(TestCase):
 
         result = self.client.post('/getReminders.json')
         self.assertEqual(result.status_code, 200)
+
+################################################################################
+# Tests for HELPER FUNCTIONS
+
+    def test_sort_interactions_by_date(self):
+        """Tests the sort interactions by date helper function"""
+
+        result = helper.sort_user_interactions_by_date(1)
+        self.assertEqual(len(result), 3)
+
+
+    def test_get_and_sort_contacts_by_power(self):
+        """Tests the get_and_sort_contacts_by_power helper function"""
+
+        result = helper.get_and_sort_contacts_by_power(1)
+        self.assertEqual(len(result), 2)
+
+
+    def test_calculate_t_delta_since_last_int(self):
+        """Tests the calculate_t_delta_since_last_int helper function"""
+
+        helper.calculate_t_delta_since_last_int(1)
+        int_list = db.session.query(Interaction).filter(Interaction.contact_id == 1).all()
+        self.assertEqual(int_list[2].t_delta_since_last_int, 3)
+
+
+    def test_update_t_since_last_int(self):
+        """Tests the update_t_since_last_int helper function"""
+
+        result = helper.update_t_since_last_int(1)
+        self.assertNotEqual(Contact.query.get(1).t_since_last_int, -1)
+
+
+    def test_update_total_frienergy(self):
+        """Tests the update_total_frienergy helper function"""
+
+        result = helper.update_total_frienergy(1)
+        self.assertEqual(Contact.query.get(1).total_frienergy, 24)
+
+
+    def test_update_avg_t_btwn_ints(self):
+        """Tests the update_avg_t_btwn_ints helper function"""
+
+        result = helper.update_avg_t_btwn_ints(1)
+        self.assertEqual(Contact.query.get(1).avg_t_btwn_ints, 3)
+
+
+    def test_calculate_power(self):
+        """Tests the calculate_power helper function"""
+
+        self.assertEqual(helper.calculate_power(1), 8.0)
+
 
 if __name__ == "__main__":
     import unittest
