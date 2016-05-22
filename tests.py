@@ -20,7 +20,14 @@ class FlaskTestsDatabase(TestCase):
 
         # Create tables and add sample data
         db.create_all()
-        example_data()
+        # inputs sample data for testing from model.py
+        example_data() 
+
+        with self.client as c:
+            with c.session_transaction() as sess:
+                sess['logged_in_user_id'] = 1
+                sess['logged_in_email'] = 'email@domain.com'
+                sess['logged_in_user_name'] = 'First'
 
     def tearDown(self):
         """Do at end of every test."""
@@ -79,6 +86,38 @@ class FlaskTestsDatabase(TestCase):
                 'password': 'notsafe'
             }, follow_redirects=True)
         self.assertIn("Joe's Profile", result.data)
+
+
+    def test_logout(self):
+        """Tests the logout route"""
+
+        result = self.client.get('/logout', follow_redirects=True)
+        self.assertIn("Streamline your social interactions", result.data)
+
+
+    # def test_get_user(self):
+    #     """Test the get_user() route"""
+
+    #     result = self.client.post('/getUser.json', data={'logged_in_user_id': 1})
+    #     self.assertIn("email@domain.com", result.data)
+
+
+    def test_edit_profile(self):
+        """Tests the edit_profile route"""
+
+        result = self.client.post('/editProfile', data={
+                    'first-name': 'First',
+                    'last-name': 'Last',
+                    'email': 'email@place.com',
+                    'zipcode': '12345',
+                    'password': 'notsafe'
+                }, follow_redirects=True)
+
+        self.assertIn("First's Profile", result.data)
+
+
+
+
 
 if __name__ == "__main__":
     import unittest

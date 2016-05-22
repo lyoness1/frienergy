@@ -116,7 +116,7 @@ def register():
     session['logged_in_user_id'] = new_user.user_id
     session['logged_in_user_name'] = new_user.first_name
 
-    flash("You have Successfully registred! You are now logged in.")
+    flash("You have successfully registred! You are now logged in.")
     return redirect("/dashboard/"+str(new_user.user_id))
 
 

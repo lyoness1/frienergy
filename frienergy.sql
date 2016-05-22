@@ -219,12 +219,8 @@ ALTER TABLE ONLY users ALTER COLUMN user_id SET DEFAULT nextval('users_user_id_s
 --
 
 COPY contacts (user_id, contact_id, first_name, last_name, email, cell_phone, street, city, state, zipcode, total_frienergy, avg_t_btwn_ints, t_since_last_int) FROM stdin;
-1	26	Sarah	Flemming							0	0	-1
-1	1	Anna	Kiefer	annakiefer12@gmail.com	301-536-3989					12	3.5	7
 1	2	Christina	Clarkin	cristinamclarkin@gmail.com	201-887-1119					8	0	14
-1	3	Katie 	Lundsgard	katie.lundsgaard@gmail.com						5	0	14
 1	4	Katie	Simmons	katie@katie.codes	651-361-0974					18	8	7
-1	7	Christina	Feeny	christina@feenys.net	650-380-0666	607 Mountain Home Rd	Woodside	CA	94062	37	5.1111111109999996	9
 1	8	Daniel	Feeny			607 Mountain Home Rd	Woodside	CA	94062	7	15.3333333300000003	9
 1	9	Curtis	Feeny	curtis@feenys.net		607 Mountain Home Rd	Woodside	CA	94062	21	9.19999999999999929	9
 1	11	Hilary	Jones	hilarypjones@yahoo.com	650-326-8232	235 Walter Hays Dr.	Palo Alto	CA	94303	6	8	10
@@ -240,6 +236,10 @@ COPY contacts (user_id, contact_id, first_name, last_name, email, cell_phone, st
 1	10	Jaime	Lyon	lyon.jaime@gmail.com	510-725-2135	235 Walter Hays Dr.	Palo Alto		94303	17	2	2
 1	25	Inas	Hyatt	inas.raheema@gmail.com						11	2.33333333333333348	0
 1	6	Veronica	Erik	veronica@ellenblakeley.com	707-696-0691					14	7	0
+1	3	Katie 	Lundsgard	katie.lundsgaard@gmail.com						7	14	0
+1	26	Sarah	Flemming							2	0	0
+1	1	Anna	Kiefer	annakiefer12@gmail.com	301-536-3989					13	4.66666666666666696	0
+1	7	Christina	Feeny	christina@feenys.net	650-380-0666	607 Mountain Home Rd	Woodside	CA	94062	38	5.5	0
 \.
 
 
@@ -323,6 +323,10 @@ COPY interactions (interaction_id, contact_id, user_id, date, frienergy, t_delta
 70	10	1	2016-05-18	1	3
 72	6	1	2016-05-20	3	2
 71	25	1	2016-05-20	4	2
+73	3	1	2016-05-20	2	14
+74	26	1	2016-05-20	2	0
+75	1	1	2016-05-20	1	7
+76	7	1	2016-05-20	1	9
 \.
 
 
@@ -330,7 +334,7 @@ COPY interactions (interaction_id, contact_id, user_id, date, frienergy, t_delta
 -- Name: interactions_interaction_id_seq; Type: SEQUENCE SET; Schema: public; Owner: alyon
 --
 
-SELECT pg_catalog.setval('interactions_interaction_id_seq', 72, true);
+SELECT pg_catalog.setval('interactions_interaction_id_seq', 76, true);
 
 
 --
