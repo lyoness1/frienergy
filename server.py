@@ -381,7 +381,7 @@ def get_interaction():
 
     # gets contact name for form
     c = Contact.query.get(i.contact_id)
-    contact_name = c.first_name + " " + c.last_name
+    contact_name = str(c.first_name) + " " + str(c.last_name)
 
     # pulls text of note, if note was created
     if i.note:
@@ -425,7 +425,7 @@ def edit_interaction():
     if note_id:
         note = Note.query.get(note_id)
         note.text = text
-    else:
+    elif text != "":
         note = Note(contact_id=i.contact_id,
                     interaction_id=interaction_id,
                     text=text)
@@ -451,7 +451,7 @@ def delete_interaction():
     # deletes note corresponding to interaction
     if i.note:
         db.session.delete(Note.query.get(interaction_id))
-    
+
     # deletes interaction object from db
     db.session.delete(Interaction.query.get(interaction_id))
     db.session.commit()
@@ -463,7 +463,7 @@ def delete_interaction():
     return redirect("/dashboard/"+str(user_id))
 
 ################################################################################
-# Routes to handle NOTES 
+# Routes to handle NOTES
 
 @app.route('/getNote.json', methods=['GET'])
 def get_note():
@@ -472,11 +472,7 @@ def get_note():
     interaction_id = request.args.get('id')
     interaction = Interaction.query.get(interaction_id)
     note = interaction.note
-    text = note.text
-
-    print text 
-
-    return text
+    return note.text
 
 
 ################################################################################
