@@ -20,9 +20,11 @@ class FlaskTestsDatabase(TestCase):
 
         # Create tables and add sample data
         db.create_all()
+        
         # inputs sample data for testing from model.py
         example_data() 
 
+        # establish a client session for use in tests
         with self.client as c:
             with c.session_transaction() as sess:
                 sess['logged_in_user_id'] = 1
@@ -35,6 +37,8 @@ class FlaskTestsDatabase(TestCase):
         db.session.close()
         db.drop_all()
 
+################################################################################
+# Tests for routes to handle RENDERING PAGES
 
     def test_index(self):
         """Test homepage page."""
@@ -49,6 +53,8 @@ class FlaskTestsDatabase(TestCase):
         result = self.client.get("/dashboard/1")
         self.assertIn("First's Profile", result.data)
 
+################################################################################
+# Tests for routes to handle LOGIN and LOGOUT
 
     def test_login(self):
         """Test login modal."""
@@ -95,11 +101,11 @@ class FlaskTestsDatabase(TestCase):
         self.assertIn("Streamline your social interactions", result.data)
 
 
-    # def test_get_user(self):
-    #     """Test the get_user() route"""
+    def test_get_user(self):
+        """Test the get_user() route"""
 
-    #     result = self.client.post('/getUser.json', data={'logged_in_user_id': 1})
-    #     self.assertIn("email@domain.com", result.data)
+        result = self.client.get('/getUser.json')
+        self.assertIn("email@domain.com", result.data)
 
 
     def test_edit_profile(self):
@@ -115,8 +121,44 @@ class FlaskTestsDatabase(TestCase):
 
         self.assertIn("First's Profile", result.data)
 
+################################################################################
+# Tests for routes to handle adding/deleting/editing CONTACTS 
+
+    def test_add_contact(self):
+        """Tests the add contact route"""
+
+        result = self.client.post('/addContact', data={'first-name': 'First_3'},
+                                  follow_redirects=True)
+        self.assertIn("First's Profile", result.data)
 
 
+    def test_get_contact(self):
+        """Tests the get_contact route"""
+
+        result = self.client.post('/getContact.json', data={'id': 1},
+                                   follow_redirects=True)
+        self.assertIn("This is a test note", result.data)
+
+
+    def test_edit_contact(self):
+        """Tests the add contact route"""
+
+        result = self.client.post('/editContact', data={
+                        'contact-id': 1,
+                        'first-name': 'First_1'},
+                        follow_redirects=True)
+        self.assertIn("First's Profile", result.data)
+
+
+    def test_delete_contact(self):
+        """Tests the add contact route"""
+
+        result = self.client.post('/deleteContact', data={
+                        'contact-id': 1}, follow_redirects=True)
+        self.assertIn("First's Profile", result.data)
+
+################################################################################
+# Tests for routes to handle adding/deleting/editing and INTERACTIONS
 
 
 if __name__ == "__main__":
