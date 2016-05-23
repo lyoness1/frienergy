@@ -124,11 +124,11 @@ def example_data():
     """Create some sample data for use with testing."""
 
     # In case this is run more than once, empty out existing data
-    User.query.delete()
-    Contact.query.delete()
-    Interaction.query.delete()
     Note.query.delete()
-
+    Interaction.query.delete()
+    Contact.query.delete()
+    User.query.delete()
+    
     # Add a fake user
     u1 = User(first_name="First",
               last_name="Last",

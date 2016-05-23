@@ -300,55 +300,59 @@ class FlaskTestsDatabase(unittest.TestCase):
         self.assertEqual(helper.calculate_power(1), 8.0)
 
 
-class FrontEndTests(unittest.TestCase):
-    """Tests the JavaScript front end AJAX/JSON functionality"""
+# class FrontEndTests(unittest.TestCase):
+#     """Tests the JavaScript front end AJAX/JSON functionality"""
 
-    def setUp(self):
-        """Stuff to do before every test."""
+#     def setUp(self):
+#         """Stuff to do before every test."""
 
-        # Get the Flask test client
-        self.client = server.app.test_client()
-        server.app.config['TESTING'] = True
-        server.app.secret_key = "ABC"
+#         # Get the Flask test client
+#         self.client = server.app.test_client()
+#         server.app.config['TESTING'] = True
+#         server.app.secret_key = "ABC"
 
-        # Connect to test database
-        connect_to_db(server.app, "postgresql:///testdb")
+#         # Connect to test database
+#         connect_to_db(server.app, "postgresql:///testdb")
 
-        # Create tables and add sample data
-        db.create_all()
+#         # Create tables and add sample data
+#         db.create_all()
 
-        # inputs sample data for testing from model.py
-        example_data()
+#         # inputs sample data for testing from model.py
+#         example_data()
 
-        # establish a client session for use in tests
-        with self.client as c:
-            with c.session_transaction() as sess:
-                sess['logged_in_user_id'] = 1
-                sess['logged_in_email'] = 'email@domain.com'
-                sess['logged_in_user_name'] = 'First'
+#         # establish a client session for use in tests
+#         with self.client as c:
+#             with c.session_transaction() as sess:
+#                 sess['logged_in_user_id'] = 1
+#                 sess['logged_in_email'] = 'email@domain.com'
+#                 sess['logged_in_user_name'] = 'First'
 
-        # creates a client in which to test front end functionality
-        self.browser = webdriver.Firefox()
-        # loads the dashboard for the fake user
-        self.browser.get('http://localhost:5000/dashboard/1')
-
-    def tearDown(self):
-        """Do at end of every test."""
-
-        db.session.close()
-        db.drop_all()
-        self.browser.quit()
+#         # creates a client in which to test front end functionality
+#         self.browser = webdriver.Firefox()
+#         # loads the dashboard for the fake user
+#         self.browser.get('http://localhost:5000/dashboard/1')
 
 
-    def test_add_interaction_modal_ajax(self):
-        """Tests that the add interaction modal appears with correct info"""
-        pass
-        # self.browser.find_element_by_css_selector('[data-contact-id="1"]').click()
-        # WebDriverWait(self.browser, 5).until(
-        #     EC.presence_of_element_located(By.CSS_SELECTOR, "h5#contact-name-for-form")
-        #     )
-        # element = self.browser.find_element(By.CSS_SELECTOR, "h5#contact-name-for-form")
-        # self.assertEqual(element.text, "First_1")
+#     def tearDown(self):
+#         """Do at end of every test."""
+
+#         db.session.close()
+#         db.drop_all()
+#         self.browser.quit()
+
+
+#     def test_add_interaction_modal_ajax(self):
+#         """Tests that the add interaction modal appears with correct info"""
+
+#         WebDriverWait(self.browser, 10).until(
+#             EC.presence_of_element_located((By.CSS_SELECTOR, "#relationshipModal"))
+#         )
+#         self.browser.find_element_by_css_selector('[data-contact-id="1"]').click()
+#         WebDriverWait(self.browser, 10).until(
+#             EC.text_to_be_present_in_element((By.CSS_SELECTOR, "#contact-name-for-form"), "First_1")
+#         )
+#         element = self.browser.find_element(By.CSS_SELECTOR, "#contact-name-for-form")
+#         self.assertEqual(element.text, "First_1")
 
 
 
