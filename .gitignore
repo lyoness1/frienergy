@@ -1,2 +1,6 @@
 env/
 *.pyc
+.DS_Store
+.coverage
+htmlcov/
+templates/.DS_Store
