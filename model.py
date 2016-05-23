@@ -156,19 +156,19 @@ def example_data():
     # Add some fake interactions
     i3 = Interaction(contact_id=c1.contact_id,
                      user_id=u1.user_id,
-                     date=datetime.date(2016, 5, 20),
+                     date=datetime.date(2016, 5, 17),
                      frienergy=10,
                      t_delta_since_last_int=3)
 
     i2 = Interaction(contact_id=c1.contact_id,
                      user_id=u1.user_id,
-                     date=datetime.date(2016, 5, 17),
+                     date=datetime.date(2016, 5, 14),
                      frienergy=10,
                      t_delta_since_last_int=3)
 
     i1 = Interaction(contact_id=c1.contact_id,
                      user_id=u1.user_id,
-                     date=datetime.date(2016, 5, 14),
+                     date=datetime.date(2016, 5, 11),
                      frienergy=4,
                      t_delta_since_last_int=0)
 

@@ -38,10 +38,11 @@ def get_and_sort_contacts_by_power(user_id):
             contact_powers.append([power, contact.first_name, contact.last_name, contact.contact_id])
         contact_powers = sorted(contact_powers, reverse=True)
 
-    # calculates power as a percentage of the largest power in the list
+        # calculates power as a percentage of the largest power in the list
         max_power = contact_powers[0][0]
         for power in contact_powers:
-            power[0] = (power[0] / max_power) * 100
+            if max_power != 0:
+                power[0] = (power[0] / max_power) * 100
 
     return contact_powers
 

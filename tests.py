@@ -123,7 +123,7 @@ class FlaskTestsDatabase(TestCase):
         self.assertIn("First's Profile", result.data)
 
 ################################################################################
-# Tests for routes to handle adding/deleting/editing CONTACTS 
+# Tests for routes to handle adding/deleting/editing CONTACTS
 
     def test_add_contact(self):
         """Tests the add contact route"""
@@ -152,7 +152,7 @@ class FlaskTestsDatabase(TestCase):
 
 
     def test_delete_contact(self):
-        """Tests the add contact route"""
+        """Tests the delete contact route"""
 
         result = self.client.post('/deleteContact', data={
                         'contact-id': 1}, follow_redirects=True)
@@ -177,20 +177,36 @@ class FlaskTestsDatabase(TestCase):
     def test_get_interaction(self):
         """Tests the get_interaction route"""
 
+        # tests the case of a note attached to the interaction
         result = self.client.post('/getInteraction.json', data={'id': 1})
         self.assertIn("This is a test note", result.data)
+
+        # tests the case of a note not attached to the itneraction
+        result = self.client.post('/getInteraction.json', data={'id': 2})
+        self.assertNotIn("This is a test note", result.data)
 
 
     def test_edit_interaction(self):
         """Tests the edit_interaction route"""
 
+        # tests the case of a note pre-existing and being updated
         result = self.client.post('/editInteraction',
                     data= {
-                        'interaction-id': 1,
-                        'date': datetime.date(2016, 5, 14),
+                        'interaction-id': 3,
+                        'date': datetime.date(2016, 5, 11),
                         'frienergy': 9,
                         'notes': "Updated note",
                         'note-id': 1,
+                    }, follow_redirects=True)
+        self.assertIn("First's Profile", result.data)
+
+        # tests the case of a new note being added to the interaction
+        result = self.client.post('/editInteraction',
+                    data= {
+                        'interaction-id': 2,
+                        'date': datetime.date(2016, 5, 14),
+                        'frienergy': 9,
+                        'notes': "New note",
                     }, follow_redirects=True)
         self.assertIn("First's Profile", result.data)
 
@@ -221,6 +237,7 @@ class FlaskTestsDatabase(TestCase):
 
         result = self.client.post('/getReminders.json')
         self.assertEqual(result.status_code, 200)
+        self.assertIn("First_1", result.data)
 
 ################################################################################
 # Tests for HELPER FUNCTIONS
@@ -264,8 +281,13 @@ class FlaskTestsDatabase(TestCase):
     def test_update_avg_t_btwn_ints(self):
         """Tests the update_avg_t_btwn_ints helper function"""
 
-        result = helper.update_avg_t_btwn_ints(1)
+        # tests the case where the contact has multiple interactions
+        helper.update_avg_t_btwn_ints(1)
         self.assertEqual(Contact.query.get(1).avg_t_btwn_ints, 3)
+
+        # tests the case where the contact has no interactions
+        helper.update_avg_t_btwn_ints(2)
+        self.assertEqual(Contact.query.get(2).avg_t_btwn_ints, 0)
 
 
     def test_calculate_power(self):
