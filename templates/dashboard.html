@@ -11,14 +11,23 @@
 
             <!-- profile panel -->
             <div class="panel panel-default">
+
                 <div class="panel-heading clearfix">
                     <button type="button" class="btn btn-primary btn-sm pull-right" data-toggle="modal" data-target="#profileEditModal" id="edit-profile-button">Edit</button>
                     <h2 class="pull-left">{{ user.first_name }}'s Profile</h2>
                 </div>
+
                 <div class="panel-body">
                     <p>Zipcode: {{ user.zipcode }}</p>
-                    <p>Email: {{ user.email }}</p>
+                    <p>Ema
+                        il: {{ user.email }}</p>
                 </div>
+
+                <div class="frienergy-graph">
+                    <canvas id="lineGraph"></canvas>
+                    <div id="lineLegend" class="graph-legend"></div>
+                </div>
+
             </div>
 
         </div>
