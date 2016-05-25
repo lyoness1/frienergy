@@ -90,8 +90,8 @@ def get_frienergy_totals(user_id):
         frienergies[interaction.frienergy] += 1
 
     # calculates values as percentages of total number of interactions
-    # for x in range(1, 11):
-    #     frienergies[x] = (frienergies[x] / total_interactions) * 100
+    for x in range(1, 11):
+        frienergies[x] = round((float(frienergies[x])/total_interactions)*100,0)
 
     # renders data readable for pie chart
     data_dict = {
