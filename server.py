@@ -7,6 +7,7 @@ from flask_debugtoolbar import DebugToolbarExtension
 
 from model import connect_to_db, db, User, Contact, Interaction, Note
 from helper import *
+from graphics import *
 
 import datetime
 import json
@@ -505,68 +506,27 @@ def calculate_reminders():
     return jsonify(reminders)
 
 
+################################################################################
+# routes to get data for rendering graphics
+
 @app.route('/frienergy-per-time.json')
-def get_frienergy_by_time():
-    """ Bar chart """
+def make_graph():
+    """Makes a graph"""
 
     # gets current user's id from session
     user_id = session['logged_in_user_id']
 
-    # generates a dictionary with all dates since first interaction as keys
-    base = datetime.date.today()
-    numdays = (base - Interaction.query.get(1).date).days
-    frienergy_by_date = {}
-    for num_days in range(0, numdays + 1):
-        date = (base - datetime.timedelta(num_days)).strftime("%m-%d")
-        frienergy_by_date[date] = []
+    return get_frienergy_by_time(user_id)
 
-    # gets all interactions of current user and adds a list of frienergies
-    # by date into the dictionary. 
-    # Ex: frienergy_by_date = {"5-23": [3, 5, 7],...}
-    all_interactions = db.session.query(Interaction).filter(Interaction
-                                        .user_id == user_id).all()
-    for interaction in all_interactions:
-        date = interaction.date.strftime("%m-%d")
-        frienergy_by_date[date].append(interaction.frienergy)
 
-    keys = sorted(frienergy_by_date.keys())
-    
-    # makes two sets of data:
-    # counts the number of interactions per date in the dictionary (Ex: 3)
-    # counts the total amount of frienergy per date in the dictionary (Ex: 15)
-    number_of_ints_per_day = []
-    total_frienergy_per_day = []
-    for key in keys:
-        number_of_ints_per_day.append(len(frienergy_by_date[key]))
-        total_frienergy_per_day.append(sum(frienergy_by_date[key]))
+@app.route('/frienergy-per-int.json')
+def make_pie_chart():
 
-    data_dict = {
-        "labels": keys,
-        "datasets": [
-            {
-                "label": "Total Frienergy",
-                "fillColor": "rgba(220,220,220,0.2)",
-                "strokeColor": "rgba(220,220,220,1)",
-                "pointColor": "rgba(220,220,220,1)",
-                "pointStrokeColor": "#fff",
-                "pointHighlightFill": "#fff",
-                "pointHighlightStroke": "rgba(220,220,220,1)",
-                "data": total_frienergy_per_day
-            },
-            {
-                "label": "Number of Interactions",
-                "fillColor": "rgba(151,187,205,0.2)",
-                "strokeColor": "rgba(151,187,205,1)",
-                "pointColor": "rgba(151,187,205,1)",
-                "pointStrokeColor": "#fff",
-                "pointHighlightFill": "#fff",
-                "pointHighlightStroke": "rgba(151,187,205,1)",
-                "data": number_of_ints_per_day
-            }
-        ],
-    }
+    # gets current user's id from session
+    user_id = session['logged_in_user_id']
 
-    return jsonify(data_dict)
+    return get_frienergy_totals(user_id)
+
 
 ################################################################################
 # Runs app (with debugger tools)

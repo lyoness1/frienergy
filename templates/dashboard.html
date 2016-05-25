@@ -18,15 +18,20 @@
                 </div>
 
                 <div class="panel-body">
-                    <p>Zipcode: {{ user.zipcode }}</p>
-                    <p>Ema
-                        il: {{ user.email }}</p>
+                    
+                    <div class="col-xs-7">
+                        <canvas id="lineGraph"></canvas>
+                        <!-- <div id="lineLegend"></div> -->
+                    </div>
+
+                    <div class="col-xs-5">
+                        <canvas id="pieChart"></canvas>
+                        <!-- <div id="pieLegend"></div> -->
+                    </div>
+
                 </div>
 
-                <div class="frienergy-graph">
-                    <canvas id="lineGraph"></canvas>
-                    <div id="lineLegend" class="graph-legend"></div>
-                </div>
+                
 
             </div>
 
