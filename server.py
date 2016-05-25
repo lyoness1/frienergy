@@ -563,7 +563,7 @@ def get_frienergy_by_time():
                 "pointHighlightStroke": "rgba(151,187,205,1)",
                 "data": number_of_ints_per_day
             }
-        ]
+        ],
     }
 
     return jsonify(data_dict)
