@@ -90,7 +90,7 @@ def update_t_since_last_int(contact_id):
 
 
 def update_total_frienergy(contact_id):
-    """updates contact attributes: total_frienergy, avg_t_btwn_ints, and t_since_last_int"""
+    """updates contact attribute total_frienergy"""
 
     # gets contact object from their id
     contact = Contact.query.get(contact_id)

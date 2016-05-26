@@ -3,12 +3,23 @@
 from model import connect_to_db, db, User, Interaction, Contact, Note
 from flask import jsonify
 import datetime
+import random
 
-COLORS = ["rgba(255, 0, 0, 0.4)", "rgba(255, 127, 0, 0.4)",#red, orange
-          "rgba(255, 255, 0, 0.4)", "rgba(0, 153, 0, 0.3)",#yellow, green
-          "rgba(0, 204, 204, 0.4)", "rgba(50, 153, 255, 0.4)",#teal, blue
-          "rgba(50, 50, 255, 0.4)", "rgba(153, 50, 255, 0.4)",#periwink, purple
-          "rgba(204, 0, 204, 0.3)", "rgba(255, 0, 127, 0.3)"] #magenta, pink
+COLORS = {"Periwinkle": "rgba(0, 0, 168, 0.6)",
+          "Purple": "rgba(84, 0, 168, 0.6)",
+          "Pink": "rgba(168, 0, 168, 0.6)",
+          "Red": "rgba(168, 0, 0, 0.6)",
+          "Green": "rgba(168, 0, 0, 0.6)",
+          "Teal": "rgba(0, 168, 168, 0.6)",
+          "Blue": "rgba(0, 84, 168, 0.6)",
+          "lightPeriwinkle": "rgba(0, 0, 168, 0.3)",
+          "lightPurple": "rgba(84, 0, 168, 0.3)",
+          "lightPink": "rgba(168, 0, 168, 0.3)",
+          "lightRed": "rgba(168, 0, 0, 0.3)",
+          "lightGreen": "rgba(168, 0, 0, 0.3)",
+          "lightTeal": "rgba(0, 168, 168, 0.3)",
+          "lightBlue": "rgba(0, 84, 168, 0.3)",
+          }
 
 
 def get_frienergy_by_time(user_id):
@@ -47,7 +58,7 @@ def get_frienergy_by_time(user_id):
         "datasets": [
             {
                 "label": "Total Frienergy",
-                "backgroundColor": COLORS[5],
+                "backgroundColor": "rgba(195, 189, 218, .4)",
                 # "fillColor": "rgba(220,220,220,0.2)",
                 # "strokeColor": "rgba(220,220,220,1)",
                 # "pointColor": "rgba(220,220,220,1)",
@@ -58,7 +69,7 @@ def get_frienergy_by_time(user_id):
             },
             {
                 "label": "Number of Interactions",
-                "backgroundColor": COLORS[6],
+                "backgroundColor": "rgba(108, 100, 139, .4)",
                 # "fillColor": "rgba(151,187,205,0.2)",
                 # "strokeColor": "rgba(151,187,205,1)",
                 # "pointColor": "rgba(151,187,205,1)",
@@ -93,13 +104,18 @@ def get_frienergy_totals(user_id):
     for x in range(1, 11):
         frienergies[x] = round((float(frienergies[x])/total_interactions)*100,0)
 
+    # gets 10 colors from global COLORS dictionary
+    colors = []
+    for x in range(0, 10):
+        colors.append(random.choice(COLORS.values()))
+
     # renders data readable for pie chart
     data_dict = {
         "labels": frienergies.keys(),
         "datasets": [
             {
                 "data": frienergies.values(),
-                "backgroundColor": COLORS
+                "backgroundColor": colors
             }
         ],
     }

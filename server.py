@@ -39,20 +39,30 @@ def show_dashboard(user_id):
 
     # returns the user object to be able to display their profile information
     user = User.query.get(user_id)
+    name = user.first_name.upper()
 
     # returns a list of tupes for all interactions of user: (interaction, date)
     # list is sorted with newest interaction first
     interactions = sort_user_interactions_by_date(user_id)
+    total_interactions = len(interactions)
+    total_frienergy = 0
+    for interaction in interactions:
+        total_frienergy += interaction[0].frienergy
 
     # returns a list of lists: [power-%, fname, lname, contact_id]
     # list is sorted by highest power percentage first
     contacts = get_and_sort_contacts_by_power(user_id)
+    total_contacts = len(contacts)
 
     # renders the dashboard.html page with user's contact and interaction data
     return render_template("dashboard.html",
                            user=user,
+                           name=name,
                            interactions=interactions,
-                           contacts=contacts)
+                           contacts=contacts,
+                           total_interactions=total_interactions,
+                           total_frienergy=total_frienergy,
+                           total_contacts=total_contacts)
 
 
 ################################################################################

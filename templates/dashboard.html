@@ -3,40 +3,82 @@
 
 <div class="container-fluid">
 
-    <!-- profile information row -->
+    <div class="row">
+        <!-- widget #1 -->
+        <div class="col-xs-3">
+            <div class="panel panel-default widget" id="widget1">
+                <div class="panel-body clearfix">
+                    <a href="" role="button" title="Edit profile" class="pull-right" data-toggle="modal" data-target="#profileEditModal" id="edit-profile-button"><img src="/static/images/dashboard.png" class="myWidget"></a>
+                    <h4>DASHBOARD PROFILE</h4>
+                    <img src="/static/images/star.png" style="height: 48px; width: 48px; display: block; opacity: .4" class="pull-left"><h2> {{ name }}</h2>
+                </div>
+            </div>
+        </div>
+
+        <!-- widget #2 -->
+        <div class="col-xs-3">
+            <div class="panel panel-default widget" id="widget2">
+                <div class="panel-body clearfix">
+                    <img src="/static/images/contacts.png" class="myWidget pull-right">
+                    <h4>TOTAL CONTACTS</h4>
+                    <h2>{{ total_contacts }}</h2>
+                </div>
+            </div>
+        </div>
+
+        <!-- widget #3 -->
+        <div class="col-xs-3">
+            <div class="panel panel-default widget" id="widget3">
+                <div class="panel-body clearfix">
+                    <img src="/static/images/interaction.png" class="myWidget pull-right">
+                    <h4>TOTAL INTERACTIONS</h4>
+                    <h2>{{ total_interactions }}</h2>
+                </div>
+            </div>
+        </div>
+
+        <!-- widget #4 -->
+        <div class="col-xs-3">
+            <div class="panel panel-default widget" id="widget4">
+                <div class="panel-body clearfix">
+                    <img src="/static/images/party.png" class="myWidget pull-right">
+                    <h4>TOTAL FRIENERGY</h4>
+                    <h2>{{ total_frienergy }}</h2>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- row #2 -->
     <div class="row">
 
-        <!-- profile column -->
-        <div class="col-xs-12">
-
-            <!-- profile panel -->
+        <!-- line graph column -->
+        <div class="col-xs-8">
             <div class="panel panel-default">
-
-                <div class="panel-heading clearfix">
-                    <button type="button" class="btn btn-primary btn-sm pull-right" data-toggle="modal" data-target="#profileEditModal" id="edit-profile-button">Edit</button>
-                    <h2 class="pull-left">{{ user.first_name }}'s Profile</h2>
+                <div class="panel-heading">
+                    <h4>Total Frienergy by Date</h4>
                 </div>
-
-                <div class="panel-body">
-                    
+                <div class="panel-body panel-fixed-1">
                     <div class="col-xs-7 text-center">
-                        <h3>Total Frienergy by Date</h4>
                         <canvas id="lineGraph"></canvas>
                         <!-- <div id="lineLegend"></div> -->
                     </div>
-
-                    <div class="col-xs-5 text-center">
-                        <h3>Percent of Interaction by Frienergy</h4>
-                        <canvas id="pieChart"></canvas>
-                        <!-- <div id="pieLegend"></div> -->
-                    </div>
-
                 </div>
-
-                
-
             </div>
+        </div>
 
+        <!-- pie chart column -->
+        <div class="col-xs-4">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4>Percent of Interaction by Frienergy</h4>
+                </div>
+                <div class="panel-body panel-fixed-1">
+                    <canvas id="pieChart"></canvas>
+                    <!-- <div id="pieLegend"></div> -->
+                </div>
+            </div>
         </div>
 
     </div>
@@ -50,9 +92,8 @@
             <!-- contacts panel -->
             <div class="panel panel-default">
                 <div class="panel-heading clearfix">
-                    <a href="" role="button" class="pull-right" data-toggle="modal" data-target="#addContactModal"><img src="/static/images/add_contact.png" style="height: 24px; width: 24px"></a>
-                    <!-- <button type="button" class="btn btn-primary btn-xs pull-right" data-toggle="modal" data-target="#addContactModal">Add Contact</button> -->
-                    <h3 class="panel-title pull-left">Contacts: </h3>
+                    <a href="" role="button" class="pull-right" title="Add contact" data-toggle="modal" data-target="#addContactModal"><img src="/static/images/add_contact.png" style="height: 36px; width: 36px"></a>
+                    <h4 class="pull-left">Contacts: </h4>
 
                 </div>
                 <div class="panel-body panel-fixed">
@@ -70,7 +111,7 @@
                             <tr class="contact-info">
 
                                 <!-- name is a link to relationship modal -->
-                                <td><a href="" class="relationship-link" data-toggle="modal" data-target="#relationshipModal" data-contact-id="{{ item[3] }}" data-name="{{ item[1] }} {{ item[2] }}">{{ item[1] }} {{ item[2] }}</a></td>
+                                <td><a href="" class="relationship-link" data-toggle="modal" data-target="#relationshipModal" data-contact-id="{{ item[3] }}" data-name="{{ item[1] }} {{ item[2] }}" title="See relationship">{{ item[1] }} {{ item[2] }}</a></td>
 
                                 <td>
                                     <div class="progress">
@@ -82,7 +123,7 @@
 
                                 <!-- button stores contact name and id -->
                                 <td>
-                                    <a href="" role="button" class="pull-right add-int" data-toggle="modal" data-target="#addInteractionModal" data-name="{{ item[1] }} {{ item[2] }}" data-contact-id="{{ item[3] }}"><img src="/static/images/plus.png" style="height: 24px; width: 24px"></a>
+                                    <a href="" role="button" class="pull-right add-int" data-toggle="modal" data-target="#addInteractionModal" data-name="{{ item[1] }} {{ item[2] }}" data-contact-id="{{ item[3] }}" title="Add interaction"><img src="/static/images/plus.png" style="height: 24px; width: 24px"></a>
                                 </td>
 
                             </tr>
@@ -101,7 +142,7 @@
             <!-- interactions panel -->
             <div class="panel panel-default">
                 <div class="panel-heading clearfix">
-                    <h3 class="panel-title pull-left">Interactions: </h3>
+                    <h4 class="pull-left">Interactions: </h4>
                 </div>
                 <div class="panel-body panel-fixed">
                     <table class="table">
@@ -118,7 +159,7 @@
                             {% for i in interactions %}
                             <tr>
                                 <!-- date is a link to edit interaction -->
-                                <td><a href="" class="interaction-link" data-toggle="modal" data-target="#editInteractionModal" data-int-id="{{ i[0].interaction_id }}">{{ i[1] }}</a></td>
+                                <td><a href="" class="interaction-link" title="Edit interaction" data-toggle="modal" data-target="#editInteractionModal" data-int-id="{{ i[0].interaction_id }}">{{ i[1] }}</a></td>
                                 <td>{{ i[0].contact.first_name }} {{ i[0].contact.last_name }}</td>
                                 <td>{{ i[0].frienergy }}</td>
                                 {% if i[0].note %}
@@ -141,7 +182,7 @@
             <div class="panel panel-default">
                 <div class="panel-heading clearfix">
                     
-                    <h3 class="panel-title pull-left">Reminders: </h3>
+                    <h4 class=" pull-left">Reminders: </h4>
 
                 </div>
                 <div class="panel-body panel-fixed">

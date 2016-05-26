@@ -1,6 +1,7 @@
 
 var options = {
-  responsive: true
+  responsive: true,
+  // adjustAspectRatio: false,
 };
 
 // creates a line graph of frienergies and interactions over time

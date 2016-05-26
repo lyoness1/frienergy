@@ -14,6 +14,14 @@ $('.add-int').on('click', function (evt) {
     $('#contact-id').attr('value', contactId);
 });
 
+// ADD INTERACTION POPOVER
+// $('.add-int').mouseover( function (evt) {
+//     var interactionId = $(this).data('id');
+//     $.get('/getNote.json', {'id': interactionId}, function (data) {
+//         $('a[data-id=' + interactionId + ']').popover({content: data}).popover('toggle');
+//     });
+// });
+
 
 // POPULATES UPDATE PROFILE MODAL
 $('#edit-profile-button').click(function (evt) {
@@ -115,5 +123,7 @@ $('.note-popover').click( function (evt) {
         $('a[data-id=' + interactionId + ']').popover({content: data}).popover('toggle');
     });
 });
+
+
 
 
