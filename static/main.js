@@ -14,14 +14,6 @@ $('.add-int').on('click', function (evt) {
     $('#contact-id').attr('value', contactId);
 });
 
-// ADD INTERACTION POPOVER
-// $('.add-int').mouseover( function (evt) {
-//     var interactionId = $(this).data('id');
-//     $.get('/getNote.json', {'id': interactionId}, function (data) {
-//         $('a[data-id=' + interactionId + ']').popover({content: data}).popover('toggle');
-//     });
-// });
-
 
 // POPULATES UPDATE PROFILE MODAL
 $('#edit-profile-button').click(function (evt) {
@@ -37,55 +29,17 @@ $('#edit-profile-button').click(function (evt) {
 });
 
 
-// DISPLAY RELATIONSHIP FOR SPECIFIC CONTACT
-// populates the contact relationship modal with contact info
-$('.relationship-link').on('click', function (evt) {
-    var contactName = $(this).data('name');
-    var contactId = $(this).data('contact-id');
-    $('#contact-name-for-relationship').text(contactName);
-    $('#contact-id-for-relationship').data('contact-id', contactId);
-    evt.preventDefault();
-    // displays interesting metrics about a specific relationship
-    $.post('/getContact.json', {'id': contactId}, function (data) {
-        // makes full name of contact
-        var name = data.first_name + " " + data.last_name;
-        // displays address in correct format
-        if (data.street) {
-            var address = (data.street + ", " + data.city + ", " +
-                           data.state + " " + data.zipcode);
-            $('#address.relationship').text(address);
-        }
-        // populates contact contact information
-        $('#name.relationship').text(name);
-        $('#email.relationship').text(data.email);
-        $('#cell-phone.relationship').text(data.cell_phone);
-        // populates relationship frienergy stats
-        $('#total-ints.relationship').text("Total interactions: " +
-            data.total_interactions);
-        $('#total-frienergy.relationship').text("Total frienergy: " +
-            data.total_frienergy);
-        $('#avg-power.relationship').text("Average frienergy per day: " +
-            data.avg_power);
-        $('#avg-t-btwn-ints.relationship').text(
-            "Average time between interactions: " + data.avg_t_btwn_ints);
-        $('#t-since-last-int.relationship').text("Time since last interaction: "
-            + data.t_since_last_int);
-        $('#avg-frienergy-each-interaction.relationship').text(
-            "Average frienergy per interaction: " +
-            data.avg_frienergy_each_interaction);
-        $('#notes.relationship').text("Notes: " + data.notes);
-    });
-});
-
-
 // EDIT CONTACT
 // populates edit contact form with current contact information from db
 $('.edit-contact').on('click', function (evt) {
     evt.preventDefault();
     // gets contact id from form
-    var contactId = $(this).data('contact-id');
+    var contactId = $(this).data('id');
     // gets contact info from server before showing the edit contact form
-    $.post('/getContact.json', {'id': contactId}, function (data) {
+    $.get('/getContact.json', {'id': contactId}, function (data) {
+        // makes full name of contact
+        var name = data.first_name + " " + data.last_name;
+        $('#contact-name-for-form').text(name);
         $('#prepopulate-contact-id').val(data.contact_id);
         $('#prepopulate-first-name').val(data.first_name);
         $('#prepopulate-last-name').val(data.last_name);

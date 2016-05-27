@@ -58,7 +58,7 @@ def get_frienergy_by_time(user_id):
         "datasets": [
             {
                 "label": "Total Frienergy",
-                "backgroundColor": "rgba(195, 189, 218, .4)",
+                "backgroundColor": "rgba(107, 186, 167, .4)",
                 # "fillColor": "rgba(220,220,220,0.2)",
                 # "strokeColor": "rgba(220,220,220,1)",
                 # "pointColor": "rgba(220,220,220,1)",
@@ -69,7 +69,7 @@ def get_frienergy_by_time(user_id):
             },
             {
                 "label": "Number of Interactions",
-                "backgroundColor": "rgba(108, 100, 139, .4)",
+                "backgroundColor": "rgba(107, 186, 167, .4)",
                 # "fillColor": "rgba(151,187,205,0.2)",
                 # "strokeColor": "rgba(151,187,205,1)",
                 # "pointColor": "rgba(151,187,205,1)",

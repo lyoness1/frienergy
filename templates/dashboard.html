@@ -110,8 +110,8 @@
                             {% for item in contacts %}
                             <tr class="contact-info">
 
-                                <!-- name is a link to relationship modal -->
-                                <td><a href="" class="relationship-link" data-toggle="modal" data-target="#relationshipModal" data-contact-id="{{ item[3] }}" data-name="{{ item[1] }} {{ item[2] }}" title="See relationship">{{ item[1] }} {{ item[2] }}</a></td>
+                                <!-- name is a link to contact page -->
+                                <td><a href="/contact/{{ item[3] }}" title="See relationship">{{ item[1] }} {{ item[2] }}</a></td>
 
                                 <td>
                                     <div class="progress">
@@ -285,65 +285,6 @@
 
 </div>
 
-<!-- Relationship Modal -->
-<div class="modal fade" id="relationshipModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-
-    <div class="modal-dialog modal-lg" role="document">
-
-        <div class="modal-content">
-
-            <!-- modal header -->
-            <div class="modal-header">
-
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-
-                <h4 class="modal-title" id="myModalLabel">Relationship</h4>
-
-                <h5 id="contact-name-for-relationship" class="pull-left"></h5>
-
-                <button type="button" id="contact-id-for-relationship" class="btn btn-primary btn-sm pull-right edit-contact" data-toggle="modal" data-dismiss="modal" data-target="#editContactModal">Edit Contact</button>
-
-            </div>
-
-            <!-- modal body -->
-            <div class="modal-body">
-                <table class="table table-striped">
-                    <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>Email</th>
-                            <th>Cell Phone</th>
-                            <th>Address</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td class="relationship" id="name"></td>
-                            <td class="relationship" id="email"></td>
-                            <td class="relationship" id="cell-phone"></td>
-                            <td class="relationship" id="address"></td>
-                        </tr>
-                    </tbody>
-                </table>
-                
-                <ul>
-                    <li class="relationship" id="total-ints"></li>
-                    <li class="relationship" id="total-frienergy"></li>
-                    <li class="relationship" id="avg-power"></li>
-                    <li class="relationship" id="avg-t-btwn-ints"></li>
-                    <li class="relationship" id="t-since-last-int"></li>
-                    <li class="relationship" id="avg-frienergy-each-interaction"></li>
-                    <li class="relationship" id="notes"></li>
-                </ul>
-
-            </div>
-
-        </div>
-
-    </div>
-
-</div>
-
 <!-- Add Contact Modal -->
 <div class="modal fade" id="addContactModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
 
@@ -416,94 +357,6 @@
                     <label class="col-sm-2 control-label"></label>
                     <div class="col-sm-10">
                         <button type="submit" class="btn btn-primary pull-right">Add</button>
-                    </div>
-                </div>
-
-                </form>
-
-            </div>
-
-        </div>
-
-    </div>
-
-</div>
-
-<!-- Edit Contact Modal -->
-<div class="modal fade" id="editContactModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-
-    <div class="modal-dialog" role="document">
-
-        <div class="modal-content">
-
-            <!-- modal header -->
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="myModalLabel">Edit Contact</h4>
-            </div>
-
-            <!-- modal body -->
-            <div class="modal-body">
-
-                <!-- form -->
-                <form action="/editContact" id="edit-contact-form" class="form-horizontal" method="POST">
-
-                <input type="hidden" id="prepopulate-contact-id" name="contact-id">
-
-                <div class="form-group">
-                    <label for="first-name" class="col-sm-2 control-label">First Name </label>
-                    <div class="col-sm-10">
-                        <input type="text" name="first-name" class="form-control" id="prepopulate-first-name" placeholder="First" required>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="last-name" class="col-sm-2 control-label">Last Name </label>
-                    <div class="col-sm-10">
-                        <input type="text" name="last-name" class="form-control" id="prepopulate-last-name" placeholder="Last">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="contact-email" class="col-sm-2 control-label">Email </label>
-                    <div class="col-sm-10">
-                        <input type="email" name="contact-email" class="form-control" id="prepopulate-email" placeholder="email@domain.com">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="cell-phone" class="col-sm-2 control-label">Cell Phone </label>
-                    <div class="col-sm-10">
-                        <input type="text" name="cell-phone" class="form-control" id="prepopulate-cell-phone" placeholder="415-555-1234">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="street" class="col-sm-2 control-label">Street </label>
-                    <div class="col-sm-10">
-                        <input type="text" name="street" class="form-control" id="prepopulate-street" placeholder="1234 Main St. #567">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="city" class="col-sm-2 control-label">City </label>
-                    <div class="col-sm-10">
-                        <input type="text" name="city" class="form-control" id="prepopulate-city" placeholder="Redwood City">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="state" class="col-sm-2 control-label">State </label>
-                    <div class="col-sm-10">
-                        <input type="text" name="state" class="form-control" id="prepopulate-state" placeholder="CA">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="zipcode" class="col-sm-2 control-label">Zipcode </label>
-                    <div class="col-sm-10">
-                        <input type="text" name="zipcode" class="form-control" id="prepopulate-zipcode" placeholder="94062">
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label class="col-sm-2 control-label"></label>
-                    <div class="col-sm-10">
-                        <button type="submit" class="btn btn-danger col-sm-offset-5" formaction="/deleteContact">Delete Contact</button>
-                        <button type="submit" class="btn btn-primary pull-right">Update Contact</button>
                     </div>
                 </div>
 

@@ -1,0 +1,208 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="container-fluid">
+
+    <div class="row">
+
+        <div class="col-xs-12">
+
+            <div class="panel panel-default">
+
+                <div class="panel-heading">
+                    <h3>{{ info.first_name }} {{ info.last_name }} | <small style="color: black;">Relationship</small></h3>
+                </div>
+
+                <div class="panel-body">
+                    <table class="table contact-table">
+                        <thead>
+                            <tr>
+                                <th>Email</th>
+                                <th>Cell Phone</th>
+                                <th>Address</th> <!-- street -->
+                                <th>Edit Contact</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>{% if info.email %}{{ info.email }}{% endif %}</td>
+                                <td>{% if info.cell_phone %}{{ info.cell_phone }}{% endif %}</td>
+                                <td>{% if info.street %}{{ info.street }}{% endif %}{% if info.city %}, {{ info.city }}{% endif %}{% if info.state %}, {{ info.state }}{% endif %}{% if info.zipcode %} {{ info.zipcode }}{% endif %}</td>
+                                <td><a role="button" data-id="{{ info.contact_id }}" class="text-center edit-contact" data-toggle="modal" data-dismiss="modal" data-target="#editContactModal"><img src="/static/images/pencil.png" style="height: 24px; width: 24px; opacity: 0.6"></a></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="row">
+
+        <!-- widget #2 -->
+        <div class="col-xs-4">
+            <div class="panel panel-default widget" id="widget2">
+                <div class="panel-body clearfix">
+                    <img src="/static/images/contacts.png" class="modalWidget pull-right">
+                    <h4>PAL POWER</h4>
+                    <h2 class="relationship">{{ info.avg_power }}</h2>
+                    <h6>Pal Power is the rate of frienergy per day</h6>
+                </div>
+            </div>
+        </div>
+
+        <!-- widget #3 -->
+        <div class="col-xs-4">
+            <div class="panel panel-default widget" id="widget3">
+                <div class="panel-body clearfix">
+                    <img src="/static/images/interaction.png" class="modalWidget pull-right">
+                    <h4>TOTAL INTERACTIONS</h4>
+                    <h2 class="relationship">{{ info.total_interactions }}</h2>
+                    <h6>You've logged this many interactions together</h6>
+                </div>
+            </div>
+        </div>
+
+        <!-- widget #4 -->
+        <div class="col-xs-4">
+            <div class="panel panel-default widget" id="widget4">
+                <div class="panel-body clearfix">
+                    <img src="/static/images/party.png" class="modalWidget pull-right">
+                    <h4>TOTAL FRIENERGY</h4>
+                    <h2 class="relationship">{{ info.total_frienergy }}</h2>
+                    <h6>This is how much frienergy you've exchanged</h6>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="row">
+                
+        <div class="col-md-7">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4>Frienergy by Date</h4>
+                </div>
+                <div class="panel-body panel-fixed-1">
+                    <div class="col-xs-7 text-center">
+                        <canvas id="contactLineGraph"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-5">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4>Interactions by Frienergy</h4>
+                </div>
+                <div class="panel-body panel-fixed-1">
+                    <div class="col-xs-7 text-center">
+                        <canvas id="contactPieChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>    
+                  
+        <!-- <li class="relationship" id="avg-t-btwn-ints"></li> -->
+        <!-- <li class="relationship" id="t-since-last-int"></li> -->
+        <!-- <li class="relationship" id="avg-frienergy-each-interaction"></li> -->     
+
+    <!-- Edit Contact Modal -->
+    <div class="modal fade" id="editContactModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+
+        <div class="modal-dialog" role="document">
+
+            <div class="modal-content">
+
+                <!-- modal header -->
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Edit Contact</h4>
+                    <h5 id="contact-name-for-form"></h5>
+                </div>
+
+                <!-- modal body -->
+                <div class="modal-body">
+
+                    <!-- form -->
+                    <form action="/editContact" id="edit-contact-form" class="form-horizontal" method="POST">
+
+                    <input type="hidden" id="prepopulate-contact-id" name="contact-id">
+
+                    <div class="form-group">
+                        <label for="first-name" class="col-sm-2 control-label">First Name </label>
+                        <div class="col-sm-10">
+                            <input type="text" name="first-name" class="form-control" id="prepopulate-first-name" placeholder="First" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="last-name" class="col-sm-2 control-label">Last Name </label>
+                        <div class="col-sm-10">
+                            <input type="text" name="last-name" class="form-control" id="prepopulate-last-name" placeholder="Last">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="contact-email" class="col-sm-2 control-label">Email </label>
+                        <div class="col-sm-10">
+                            <input type="email" name="contact-email" class="form-control" id="prepopulate-email" placeholder="email@domain.com">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="cell-phone" class="col-sm-2 control-label">Cell Phone </label>
+                        <div class="col-sm-10">
+                            <input type="text" name="cell-phone" class="form-control" id="prepopulate-cell-phone" placeholder="415-555-1234">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="street" class="col-sm-2 control-label">Street </label>
+                        <div class="col-sm-10">
+                            <input type="text" name="street" class="form-control" id="prepopulate-street" placeholder="1234 Main St. #567">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="city" class="col-sm-2 control-label">City </label>
+                        <div class="col-sm-10">
+                            <input type="text" name="city" class="form-control" id="prepopulate-city" placeholder="Redwood City">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="state" class="col-sm-2 control-label">State </label>
+                        <div class="col-sm-10">
+                            <input type="text" name="state" class="form-control" id="prepopulate-state" placeholder="CA">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="zipcode" class="col-sm-2 control-label">Zipcode </label>
+                        <div class="col-sm-10">
+                            <input type="text" name="zipcode" class="form-control" id="prepopulate-zipcode" placeholder="94062">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label"></label>
+                        <div class="col-sm-10">
+                            <button type="submit" class="btn btn-danger col-sm-offset-5" formaction="/deleteContact">Delete Contact</button>
+                            <button type="submit" class="btn btn-primary pull-right">Update Contact</button>
+                        </div>
+                    </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

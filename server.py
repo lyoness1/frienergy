@@ -88,7 +88,7 @@ def login():
             flash("Successfully logged in.")
             session['logged_in_email'] = db_user.email
             session['logged_in_user_id'] = db_user.user_id
-            session['logged_in_user_name'] = db_user.first_name
+            session['logged_in_user_name'] = db_user.first_name.upper()
             return redirect("/dashboard/"+str(db_user.user_id))
         else:
             flash("Incorrect credentials. Please try again or register.")
@@ -229,12 +229,11 @@ def add_contact():
     return redirect("/dashboard/"+str(user_id))
 
 
-@app.route('/getContact.json', methods=['POST'])
-def get_contact():
+@app.route('/contact/<int:contact_id>')
+def show_relationship(contact_id):
     """gets contact information from db for edit contact form"""
 
     # retrieves existing contact object from db
-    contact_id = request.form.get('id')
     c = Contact.query.get(contact_id)
 
     # calculates interesting metrics for a relationship's health
@@ -250,6 +249,8 @@ def get_contact():
         if i.note:
             date = i.date.strftime('%Y-%m-%d')
             notes[date] = i.note.text
+
+    print "\n\n\n", notes, "\n\n\n"
 
     # creates a dictionary of contact info to pass through JSON to HTML script
     contact_info = {
@@ -268,11 +269,35 @@ def get_contact():
         'total_interactions': total_interactions,
         'avg_power': avg_power,
         'avg_frienergy_each_interaction': avg_frienergy_per_int,
-        'notes': notes,
+    }
+
+    return render_template('contact.html',
+                           info=contact_info,
+                           notes=notes)
+
+
+@app.route('/getContact.json')
+def get_contact():
+    """Gets contact info to prepopulate edit contact modal on contact page"""
+
+    # retrieves existing contact object from db
+    contact_id = request.args.get('id')
+    c = Contact.query.get(contact_id)
+
+    # creates a dictionary of contact info to pass through JSON to HTML script
+    contact_info = {
+        'contact_id': c.contact_id,
+        'first_name': c.first_name,
+        'last_name': c.last_name,
+        'email': c.email,
+        'cell_phone': c.cell_phone,
+        'street': c.street,
+        'city': c.city,
+        'state': c.state,
+        'zipcode': c.zipcode,
     }
 
     return jsonify(contact_info)
-
 
 @app.route('/editContact', methods=['POST'])
 def edit_contact():
@@ -296,9 +321,8 @@ def edit_contact():
 
     flash("Contact successfully updated.")
 
-    # redirects to user's dashboard
-    user_id = session['logged_in_user_id']
-    return redirect("/dashboard/"+str(user_id))
+    # redirects to contact's page
+    return redirect("/contact/"+str(contact_id))
 
 
 @app.route('/deleteContact', methods=['POST'])
