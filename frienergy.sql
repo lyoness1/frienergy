@@ -220,29 +220,29 @@ ALTER TABLE ONLY users ALTER COLUMN user_id SET DEFAULT nextval('users_user_id_s
 
 COPY contacts (user_id, contact_id, first_name, last_name, email, cell_phone, street, city, state, zipcode, total_frienergy, avg_t_btwn_ints, t_since_last_int) FROM stdin;
 4	29	Allison								3	0	0
-1	12	Kristine	Chou		808-342-1680					2	3	14
-1	18	Lizzy	Gilman							4	0	23
-1	23	Joyce	Lin							8	0	14
-1	13	Chuck	Bonnici		415-860-9344					63	5.375	12
-1	17	Karl	Gummerlock		650-704-6324					16	8.33333333333333393	9
-1	8	Daniel	Feeny			607 Mountain Home Rd	Woodside	CA	94062	10	14	6
-1	2	Christina	Clarkin	cristinamclarkin@gmail.com	201-887-1119					13	17	4
-1	27	Sharon	Weinnbar							3	0	4
-1	28	Eric								8	0	4
-1	7	Christina	Feeny	christina@feenys.net	650-380-0666	607 Mountain Home Rd	Woodside	CA	94062	41	5.36363636363636331	3
-1	31	Holly	Still			530 Bay Rd. 	Menlo Park	CA	94025	4	0	1
-1	10	Jaime	Lyon	lyon.jaime@gmail.com	510-725-2135	235 Walter Hays Dr.	Palo Alto	CA	94303	38	2.11111111111111116	0
-1	4	Katie	Simmons	katie@katie.codes	651-361-0974					31	3.66666666666666652	0
-1	21	Aisling	Dempsey	aisling.n.dempsey@gmail.com	415-470-3073		San Francisco			25	2.66666666666666652	0
-1	6	Veronica	Erik	veronica@ellenblakeley.com	707-696-0691					26	4.20000000000000018	0
-1	25	Inas	Hyatt	inas.raheema@gmail.com						14	3.5	0
-1	9	Curtis	Feeny	curtis@feenys.net		607 Mountain Home Rd	Woodside	CA	94062	27	8.71428571428571352	1
-1	11	Hilary	Jones	hilarypjones@yahoo.com	650-326-8232	235 Walter Hays Dr.	Palo Alto	CA	94303	8	11	3
-1	5	Sarah	Flemming	sajafleming@gmail.com	314-750-4493					10	10.5	0
-1	3	Katie 	Lundsgard	katie.lundsgaard@gmail.com						11	10.5	0
-1	24	Maggie	Yang							8	14	0
-1	30	Aiden	Ward							6	1	0
-1	1	Anna	Kiefer	annakiefer12@gmail.com	301-536-3989					18	3.5	0
+1	13	Chuck	Bonnici		415-860-9344					64	6.22222222222222232	0
+1	12	Kristine	Chou		808-342-1680					2	3	15
+1	18	Lizzy	Gilman							4	0	24
+1	23	Joyce	Lin							8	0	15
+1	17	Karl	Gummerlock		650-704-6324					16	8.33333333333333393	10
+1	8	Daniel	Feeny			607 Mountain Home Rd	Woodside	CA	94062	10	14	7
+1	2	Christina	Clarkin	cristinamclarkin@gmail.com	201-887-1119					13	17	5
+1	27	Sharon	Weinnbar							3	0	5
+1	28	Eric								8	0	5
+1	7	Christina	Feeny	christina@feenys.net	650-380-0666	607 Mountain Home Rd	Woodside	CA	94062	41	5.36363636363636331	4
+1	31	Holly	Still			530 Bay Rd. 	Menlo Park	CA	94025	4	0	2
+1	10	Jaime	Lyon	lyon.jaime@gmail.com	510-725-2135	235 Walter Hays Dr.	Palo Alto	CA	94303	38	2.11111111111111116	1
+1	4	Katie	Simmons	katie@katie.codes	651-361-0974					31	3.66666666666666652	1
+1	21	Aisling	Dempsey	aisling.n.dempsey@gmail.com	415-470-3073		San Francisco			25	2.66666666666666652	1
+1	6	Veronica	Erik	veronica@ellenblakeley.com	707-696-0691					26	4.20000000000000018	1
+1	25	Inas	Hyatt	inas.raheema@gmail.com						14	3.5	1
+1	9	Curtis	Feeny	curtis@feenys.net		607 Mountain Home Rd	Woodside	CA	94062	27	8.71428571428571352	2
+1	11	Hilary	Jones	hilarypjones@yahoo.com	650-326-8232	235 Walter Hays Dr.	Palo Alto	CA	94303	8	11	4
+1	5	Sarah	Flemming	sajafleming@gmail.com	314-750-4493					10	10.5	1
+1	3	Katie 	Lundsgard	katie.lundsgaard@gmail.com						11	10.5	1
+1	24	Maggie	Yang							8	14	1
+1	30	Aiden	Ward							6	1	1
+1	1	Anna	Kiefer	annakiefer12@gmail.com	301-536-3989					18	3.5	1
 \.
 
 
@@ -361,6 +361,7 @@ COPY interactions (interaction_id, contact_id, user_id, date, frienergy, t_delta
 107	24	1	2016-05-27	1	14
 108	30	1	2016-05-27	3	1
 109	1	1	2016-05-27	3	4
+110	13	1	2016-05-28	1	13
 \.
 
 
@@ -368,7 +369,7 @@ COPY interactions (interaction_id, contact_id, user_id, date, frienergy, t_delta
 -- Name: interactions_interaction_id_seq; Type: SEQUENCE SET; Schema: public; Owner: alyon
 --
 
-SELECT pg_catalog.setval('interactions_interaction_id_seq', 109, true);
+SELECT pg_catalog.setval('interactions_interaction_id_seq', 110, true);
 
 
 --
