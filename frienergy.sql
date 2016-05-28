@@ -219,30 +219,30 @@ ALTER TABLE ONLY users ALTER COLUMN user_id SET DEFAULT nextval('users_user_id_s
 --
 
 COPY contacts (user_id, contact_id, first_name, last_name, email, cell_phone, street, city, state, zipcode, total_frienergy, avg_t_btwn_ints, t_since_last_int) FROM stdin;
-1	12	Kristine	Chou		808-342-1680					2	3	13
-1	14	Sam	Nelson		415-342-2284					10	0	20
-1	18	Lizzy	Gilman							4	0	22
-1	23	Joyce	Lin							8	0	13
-1	24	Maggie	Yang							7	0	13
-1	13	Chuck	Bonnici		415-860-9344					63	5.375	11
-1	17	Karl	Gummerlock		650-704-6324					16	8.33333333333333393	8
-1	5	Sarah	Flemming	sajafleming@gmail.com	314-750-4493					9	13	7
-1	25	Inas	Hyatt	inas.raheema@gmail.com						11	2.33333333333333348	6
-1	3	Katie 	Lundsgard	katie.lundsgaard@gmail.com						7	14	6
-1	8	Daniel	Feeny			607 Mountain Home Rd	Woodside	CA	94062	10	14	5
-1	2	Christina	Clarkin	cristinamclarkin@gmail.com	201-887-1119					13	17	3
-1	27	Sharon	Weinnbar							3	0	3
-1	1	Anna	Kiefer	annakiefer12@gmail.com	301-536-3989					15	3.39999999999999991	3
-1	9	Curtis	Feeny	curtis@feenys.net		607 Mountain Home Rd	Woodside	CA	94062	24	9.66666666666666607	3
-1	11	Hilary	Jones	hilarypjones@yahoo.com	650-326-8232	235 Walter Hays Dr.	Palo Alto	CA	94303	6	8	16
-1	28	Eric								8	0	3
-1	7	Christina	Feeny	christina@feenys.net	650-380-0666	607 Mountain Home Rd	Woodside	CA	94062	41	5.36363636363636331	2
-1	4	Katie	Simmons	katie@katie.codes	651-361-0974					29	3.79999999999999982	2
-1	6	Veronica	Erik	veronica@ellenblakeley.com	707-696-0691					21	4.5	2
-1	21	Aisling	Dempsey	aisling.n.dempsey@gmail.com	415-470-3073		San Francisco			21	3	0
 4	29	Allison								3	0	0
-1	10	Jaime	Lyon	lyon.jaime@gmail.com	510-725-2135	235 Walter Hays Dr.	Palo Alto	CA	94303	37	2	2
-1	30	Aiden	Ward							3	0	0
+1	12	Kristine	Chou		808-342-1680					2	3	14
+1	14	Sam	Nelson		415-342-2284					10	0	21
+1	18	Lizzy	Gilman							4	0	23
+1	23	Joyce	Lin							8	0	14
+1	24	Maggie	Yang							7	0	14
+1	13	Chuck	Bonnici		415-860-9344					63	5.375	12
+1	17	Karl	Gummerlock		650-704-6324					16	8.33333333333333393	9
+1	5	Sarah	Flemming	sajafleming@gmail.com	314-750-4493					9	13	8
+1	25	Inas	Hyatt	inas.raheema@gmail.com						11	2.33333333333333348	7
+1	3	Katie 	Lundsgard	katie.lundsgaard@gmail.com						7	14	7
+1	8	Daniel	Feeny			607 Mountain Home Rd	Woodside	CA	94062	10	14	6
+1	2	Christina	Clarkin	cristinamclarkin@gmail.com	201-887-1119					13	17	4
+1	27	Sharon	Weinnbar							3	0	4
+1	1	Anna	Kiefer	annakiefer12@gmail.com	301-536-3989					15	3.39999999999999991	4
+1	9	Curtis	Feeny	curtis@feenys.net		607 Mountain Home Rd	Woodside	CA	94062	24	9.66666666666666607	4
+1	11	Hilary	Jones	hilarypjones@yahoo.com	650-326-8232	235 Walter Hays Dr.	Palo Alto	CA	94303	6	8	17
+1	28	Eric								8	0	4
+1	7	Christina	Feeny	christina@feenys.net	650-380-0666	607 Mountain Home Rd	Woodside	CA	94062	41	5.36363636363636331	3
+1	4	Katie	Simmons	katie@katie.codes	651-361-0974					29	3.79999999999999982	3
+1	6	Veronica	Erik	veronica@ellenblakeley.com	707-696-0691					21	4.5	3
+1	21	Aisling	Dempsey	aisling.n.dempsey@gmail.com	415-470-3073		San Francisco			21	3	1
+1	10	Jaime	Lyon	lyon.jaime@gmail.com	510-725-2135	235 Walter Hays Dr.	Palo Alto	CA	94303	37	2	3
+1	30	Aiden	Ward							3	0	1
 \.
 
 

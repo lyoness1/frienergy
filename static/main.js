@@ -5,6 +5,7 @@ setTimeout(
         $('.alert').fadeOut('fast');
     }, 4000);
 
+
 // ADD INTERACTION MODAL
 // populates the add interaction modal with contact's name and id data
 $('.add-int').on('click', function (evt) {

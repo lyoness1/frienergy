@@ -5450,9 +5450,6 @@ button.list-group-item-danger.active:focus {
   height: 400px;
   overflow-y: scroll;
 }
-.panel-fixed-1 {
-  height: 360px;
-}
 .panel-heading {
   padding: 10px 15px;
   border-bottom: 4px solid blue;
@@ -7128,4 +7125,10 @@ label {
 }
 .contact-table > td {
   font-size: 16px;
+}
+#lineGraph {
+  height: 100%;
+}
+.col, .panel {
+  height: 100%;
 }

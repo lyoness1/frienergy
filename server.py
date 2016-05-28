@@ -562,6 +562,27 @@ def make_pie_chart():
     return get_frienergy_totals(user_id)
 
 
+@app.route('/frienergy-per-time-for-contact.json', methods=['POST'])
+def make_graph_for_contact():
+    """Makes a graph"""
+
+    # gets current user's id and the relevant contact's id
+    user_id = session['logged_in_user_id']
+    contact_id = request.form.get('id')
+
+    return get_frienergy_by_time_for_contact(user_id, contact_id)
+
+
+@app.route('/frienergy-per-int-for-contact.json', methods=['POST'])
+def make_pie_chart_for_contact():
+
+    # gets current user's id and the relevant contact's id
+    user_id = session['logged_in_user_id']
+    contact_id = request.form.get('id')
+
+    return get_frienergy_totals_for_contact(user_id, contact_id)
+
+
 ################################################################################
 # Runs app (with debugger tools)
 
