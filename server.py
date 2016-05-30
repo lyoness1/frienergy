@@ -12,6 +12,9 @@ from graphics import *
 import datetime
 import json
 
+# Download the twilio-python library from http://twilio.com/docs/libraries
+from twilio.rest import TwilioRestClient
+
 
 app = Flask(__name__)
 app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
@@ -534,10 +537,24 @@ def calculate_reminders():
             reminders[c.contact_id] = {
                 'first_name': c.first_name,
                 'last_name': c.last_name,
-                'days_overdue': days_overdue
+                'days_overdue': days_overdue,
+                'phone': c.cell_phone,
             }
 
     return jsonify(reminders)
+
+
+@app.route('/sendSMS.json', methods=['POST'])
+def send_sms(msg, to):
+    """Sends an SMS to a friend"""
+
+    # Find these values at https://twilio.com/user/account
+    account_sid = "AC2769cfee628eb313d1682eb9c28d3000"
+    auth_token = "8b731d0069d79aca96be32539356ba9d"
+    client = TwilioRestClient(account_sid, auth_token)
+
+    message = client.messages.create(to="+16505755706", from_="+16506009945",
+                                     body=msg)
 
 
 ################################################################################
