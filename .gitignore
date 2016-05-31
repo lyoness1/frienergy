@@ -4,5 +4,4 @@ env/
 .coverage
 htmlcov/
 templates/.DS_Store
-send-sms.py
 notes.txt
