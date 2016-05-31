@@ -592,7 +592,10 @@ def make_graph():
     # gets current user's id from session
     user_id = session['logged_in_user_id']
 
-    return get_frienergy_by_time(user_id)
+    # gets time scale from jQuery button listeners on graph panel
+    scale = request.args.get('scale')
+
+    return get_frienergy_by_time(user_id, scale)
 
 
 @app.route('/frienergy-per-int.json')

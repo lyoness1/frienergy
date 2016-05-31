@@ -26,16 +26,25 @@ COLORS = {"Periwinkle": "rgba(0, 0, 168, 0.6)",
 ################################################################################
 # FOR USER'S DASHBOARD PAGE
 
-def get_frienergy_by_time(user_id):
+def get_frienergy_by_time(user_id, scale):
     """ Bar chart """
 
-    # generates a dictionary with all dates since first interaction as keys
+    # generates a dictionary with all dates as keys based on the given scale
+    # values are initialized as empty lists that will store interaction data
     base = datetime.date.today()
-    numdays = (base - Interaction.query.get(1).date).days
+    if scale == 'all-time':
+        numdays = (base - Interaction.query.get(1).date).days
+    elif scale == 'year':
+        numdays = 365
+    elif scale == 'month':
+        numdays = 30
+    elif scale == 'week':
+        numdays = 7
     frienergy_by_date = {}
     for num_days in range(0, numdays + 1):
-        date = (base - datetime.timedelta(num_days)).strftime("%m-%d")
+        date = (base - datetime.timedelta(num_days)).strftime("%m-%d-%y")
         frienergy_by_date[date] = []
+    print sorted(frienergy_by_date.keys())
 
     # gets all interactions of current user and adds a list of frienergies
     # by date into the dictionary.
@@ -43,8 +52,9 @@ def get_frienergy_by_time(user_id):
     all_interactions = db.session.query(Interaction).filter(Interaction
                                         .user_id == user_id).all()
     for interaction in all_interactions:
-        date = interaction.date.strftime("%m-%d")
-        frienergy_by_date[date].append(interaction.frienergy)
+        date = interaction.date.strftime("%m-%d-%y")
+        if date in frienergy_by_date:
+            frienergy_by_date[date].append(interaction.frienergy)
 
     keys = sorted(frienergy_by_date.keys())
 
