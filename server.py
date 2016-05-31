@@ -236,12 +236,15 @@ def add_contact():
 def show_relationship(contact_id):
     """gets contact information from db for edit contact form"""
 
+    # gets current user's id
+    user_id = session['logged_in_user_id']
+
     # retrieves existing contact object from db
     c = Contact.query.get(contact_id)
 
     # calculates interesting metrics for a relationship's health
     all_interactions = db.session.query(Interaction).filter(Interaction
-                                        .contact_id == contact_id).all()
+        .user_id == user_id).filter(Interaction.contact_id == contact_id).all()
     total_interactions = len(all_interactions)
     avg_power = calculate_power(contact_id)
     avg_frienergy_per_int = round(sum(i.frienergy for i in all_interactions) / total_interactions, 1)

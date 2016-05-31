@@ -176,7 +176,7 @@ def get_frienergy_totals_for_contact(user_id, contact_id):
 
     # gets all user's interactions from db
     all_interactions = db.session.query(Interaction).filter(Interaction
-        .user_id == user_id and Interaction.contact_id == contact_id).all()
+        .user_id == user_id).filter(Interaction.contact_id == contact_id).all()
 
     # calculates total number of interactions for user later in calculating %
     total_interactions = len(all_interactions)

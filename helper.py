@@ -137,15 +137,21 @@ def update_avg_t_btwn_ints(contact_id):
 def calculate_power(contact_id):
     """calculates the power of a friendship as (total frienergy)/(avg interaction time-delta)"""
 
+    # gets the number of days that has passed since the first interaction w/ 
+    # relevant contact
+    base = datetime.date.today()
+    first_interaction = db.session.query(Interaction).filter(Interaction.
+                        contact_id == contact_id).first().date
+    numdays = (base - first_interaction).days
+
     # gets contact object from their id
     contact = Contact.query.get(contact_id)
 
     # gets current attributes of total frienergy and avg time delta between ints
     frienergy = contact.total_frienergy
-    avg_t_btwn_ints = contact.avg_t_btwn_ints
 
     # calcualtes and returns relationship power
-    if avg_t_btwn_ints != 0:
-        return round(frienergy / avg_t_btwn_ints, 1)
+    if numdays != 0:
+        return round(frienergy / numdays, 1)
     else:
         return 0
