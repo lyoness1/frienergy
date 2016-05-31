@@ -63,23 +63,11 @@ def get_frienergy_by_time(user_id):
             {
                 "label": "Total Frienergy",
                 "backgroundColor": "rgba(107, 186, 167, .4)",
-                # "fillColor": "rgba(220,220,220,0.2)",
-                # "strokeColor": "rgba(220,220,220,1)",
-                # "pointColor": "rgba(220,220,220,1)",
-                # "pointStrokeColor": "#fff",
-                # "pointHighlightFill": "#fff",
-                # "pointHighlightStroke": "rgba(220,220,220,1)",
                 "data": total_frienergy_per_day
             },
             {
                 "label": "Number of Interactions",
                 "backgroundColor": "rgba(107, 186, 167, .4)",
-                # "fillColor": "rgba(151,187,205,0.2)",
-                # "strokeColor": "rgba(151,187,205,1)",
-                # "pointColor": "rgba(151,187,205,1)",
-                # "pointStrokeColor": "#fff",
-                # "pointHighlightFill": "#fff",
-                # "pointHighlightStroke": "rgba(151,187,205,1)",
                 "data": number_of_ints_per_day
             }
         ],
@@ -135,7 +123,9 @@ def get_frienergy_by_time_for_contact(user_id, contact_id):
 
     # generates a dictionary with all dates since first interaction as keys
     base = datetime.date.today()
-    numdays = (base - Interaction.query.get(1).date).days
+    first_interaction = db.session.query(Interaction).filter(Interaction.
+                        contact_id == contact_id).first().date
+    numdays = (base - first_interaction).days
     frienergy_by_date = {}
     for num_days in range(0, numdays + 1):
         date = (base - datetime.timedelta(num_days)).strftime("%m-%d")
@@ -145,7 +135,8 @@ def get_frienergy_by_time_for_contact(user_id, contact_id):
     # by date into the dictionary.
     # Ex: frienergy_by_date = {"5-23": [3, 5, 7],...}
     all_interactions = db.session.query(Interaction).filter(Interaction
-        .user_id == user_id and Interaction.contact_id == contact_id).all()
+        .user_id == user_id).filter(Interaction.contact_id == contact_id).all()
+    print all_interactions
     for interaction in all_interactions:
         date = interaction.date.strftime("%m-%d")
         frienergy_by_date[date].append(interaction.frienergy)
@@ -167,23 +158,11 @@ def get_frienergy_by_time_for_contact(user_id, contact_id):
             {
                 "label": "Total Frienergy",
                 "backgroundColor": "rgba(107, 186, 167, .4)",
-                # "fillColor": "rgba(220,220,220,0.2)",
-                # "strokeColor": "rgba(220,220,220,1)",
-                # "pointColor": "rgba(220,220,220,1)",
-                # "pointStrokeColor": "#fff",
-                # "pointHighlightFill": "#fff",
-                # "pointHighlightStroke": "rgba(220,220,220,1)",
                 "data": total_frienergy_per_day
             },
             {
                 "label": "Number of Interactions",
                 "backgroundColor": "rgba(107, 186, 167, .4)",
-                # "fillColor": "rgba(151,187,205,0.2)",
-                # "strokeColor": "rgba(151,187,205,1)",
-                # "pointColor": "rgba(151,187,205,1)",
-                # "pointStrokeColor": "#fff",
-                # "pointHighlightFill": "#fff",
-                # "pointHighlightStroke": "rgba(151,187,205,1)",
                 "data": number_of_ints_per_day
             }
         ],
