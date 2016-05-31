@@ -1,10 +1,10 @@
 
 
 // defines the scope for the main controller for the angular app
-angularApp.controller('MainController', ['$scope', '$http', '$timeout', 
-    function($scope, $http, $timeout) {
+angularApp.controller('MainController', ['$scope', '$http', 
+    function($scope, $http) {
 
-    // $http.post returns and Object with an attribute named 'data'
+    // $http.post returns an Object with an attribute named 'data'
     $http.post('/getReminders.json').then(addReminder); 
     
     function addReminder(data) {
@@ -15,6 +15,15 @@ angularApp.controller('MainController', ['$scope', '$http', '$timeout',
         };
         return $scope.reminders;
     }
+
+    $scope.populateModal = function(first, last, phone) {
+        $scope.information = {}
+        $scope.information['name'] = first + ' ' + last;
+        $scope.information[phone] = phone;
+        console.log($scope.information);
+        return $scope.information;
+    }
+
 
 }]);
 

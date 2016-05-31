@@ -530,32 +530,54 @@ def calculate_reminders():
     # appents contact names and days overdue to a dictionary to pass to html
     contacts = db.session.query(Contact).filter(Contact.user_id == user_id).all()
     for c in contacts:
+        # formats phone number for use with Twilio API send SMS feature
+        phone = None
+        if c.cell_phone:
+            phone = "+1" + c.cell_phone.replace('-', '')
+        # calculates if reminder should be populated for each contact
         update_t_since_last_int(c.contact_id)
         interactions = db.session.query(Interaction).filter(Interaction.contact_id == c.contact_id).all()
         days_overdue = round(c.t_since_last_int - c.avg_t_btwn_ints, 0)
+        # creates a json object for each contact that should have a reminder
         if (days_overdue > 0) and len(interactions) > 2:
             reminders[c.contact_id] = {
                 'first_name': c.first_name,
                 'last_name': c.last_name,
                 'days_overdue': days_overdue,
-                'phone': c.cell_phone,
+                'phone': phone,
             }
 
     return jsonify(reminders)
 
 
 @app.route('/sendSMS.json', methods=['POST'])
-def send_sms(msg, to):
+def send_sms():
     """Sends an SMS to a friend"""
 
-    # Find these values at https://twilio.com/user/account
-    account_sid = "AC2769cfee628eb313d1682eb9c28d3000"
-    auth_token = "8b731d0069d79aca96be32539356ba9d"
-    client = TwilioRestClient(account_sid, auth_token)
+    # gets phone number and message from send-sms modal form
+    to_phone = request.form.get('contact-phone')
+    msg = request.form.get('msg')
+    print to_phone,  ": ", msg
 
+    # Find these values at https://twilio.com/user/account
+    ACCOUNT_SID = "AC33729a5fca2a567d46a8addffad26a1b" 
+    AUTH_TOKEN = "86a714e45256e53b4f3db9926f8d7f89" 
+ 
+    client = TwilioRestClient(ACCOUNT_SID, AUTH_TOKEN) 
+
+    # I am only sending SMS's to my phone so I don't have to pay for the Twilio
+    # API. If I were implementing this for other users or to actual friends' 
+    # phone numbers, I would add 'to_phone' in the 'to' field below. 
+    # Additionally, I would add the option of submitting a twilio account phone 
+    # number when new users register and store it as an instance attribute. 
+    # Again, I've hard coded my 'from' number for demonstration purposes. 
     message = client.messages.create(to="+16505755706", from_="+16506009945",
                                      body=msg)
 
+    # redirects to user's dashboard
+    flash("Make sure to log an interaction when they reply!")
+    user_id = session['logged_in_user_id']
+    return redirect("/dashboard/"+str(user_id))
 
 ################################################################################
 # routes to get data for rendering graphics

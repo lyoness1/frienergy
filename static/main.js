@@ -80,5 +80,14 @@ $('.note-popover').click( function (evt) {
 });
 
 
+// SEND SMS
+// populates the send SMS modal with contact's name
+$('.send-sms-link').click(function (evt) {
+    var contactName = $(this).data('name');
+    var phone = $(this).data('phone');
+    $('#contact-name').text(contactName);
+    $('#contact-phone').data('phone', phone);
+});
+
 
 
