@@ -5,3 +5,4 @@ env/
 htmlcov/
 templates/.DS_Store
 send-sms.py
+notes.txt
