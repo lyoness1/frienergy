@@ -100,8 +100,22 @@
         <!-- line graph column -->
         <div class="col-sm-8">
             <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h4>Total Frienergy by Date</h4>
+                <div class="panel-heading clearfix">
+                    
+                    <h4 class="pull-left">Total Frienergy by Date</h4>
+
+                    <div class="btn-toolbar" data-toggle="buttons">
+                        <label class="btn btn-primary pull-right toggle-graph">
+                            <input type="radio" value="week" autocomplete="off"> Past Week
+                        </label>
+                        <label class="btn btn-primary pull-right toggle-graph">
+                            <input type="radio" value="month" autocomplete="off"> Past Month
+                        </label>
+                        <label class="btn btn-primary pull-right toggle-graph active">
+                            <input type="radio" value="all-time" autocomplete="off" checked> All Time
+                        </label>
+                    </div>
+
                 </div>
                 <div class="panel-body">
                     <div>

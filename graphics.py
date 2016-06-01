@@ -34,8 +34,6 @@ def get_frienergy_by_time(user_id, scale):
     base = datetime.date.today()
     if scale == 'all-time':
         numdays = (base - Interaction.query.get(1).date).days
-    elif scale == 'year':
-        numdays = 365
     elif scale == 'month':
         numdays = 30
     elif scale == 'week':
@@ -44,7 +42,6 @@ def get_frienergy_by_time(user_id, scale):
     for num_days in range(0, numdays + 1):
         date = (base - datetime.timedelta(num_days)).strftime("%m-%d-%y")
         frienergy_by_date[date] = []
-    print sorted(frienergy_by_date.keys())
 
     # gets all interactions of current user and adds a list of frienergies
     # by date into the dictionary.
@@ -128,14 +125,20 @@ def get_frienergy_totals(user_id):
 ################################################################################
 # FOR USER'S CONTACT PAGES
 
-def get_frienergy_by_time_for_contact(user_id, contact_id):
+def get_frienergy_by_time_for_contact(user_id, contact_id, scale):
     """ Bar chart """
 
-    # generates a dictionary with all dates since first interaction as keys
+    # generates a dictionary with all dates as keys based on the given scale
+    # values are initialized as empty lists that will store interaction data
     base = datetime.date.today()
     first_interaction = db.session.query(Interaction).filter(Interaction.
-                        contact_id == contact_id).first().date
-    numdays = (base - first_interaction).days
+                        contact_id == contact_id).first()
+    if scale == 'all-time':
+        numdays = (base - first_interaction.date).days
+    elif scale == 'month':
+        numdays = 30
+    elif scale == 'week':
+        numdays = 7
     frienergy_by_date = {}
     for num_days in range(0, numdays + 1):
         date = (base - datetime.timedelta(num_days)).strftime("%m-%d")
@@ -146,10 +149,10 @@ def get_frienergy_by_time_for_contact(user_id, contact_id):
     # Ex: frienergy_by_date = {"5-23": [3, 5, 7],...}
     all_interactions = db.session.query(Interaction).filter(Interaction
         .user_id == user_id).filter(Interaction.contact_id == contact_id).all()
-    print all_interactions
     for interaction in all_interactions:
         date = interaction.date.strftime("%m-%d")
-        frienergy_by_date[date].append(interaction.frienergy)
+        if date in frienergy_by_date:
+            frienergy_by_date[date].append(interaction.frienergy)
 
     keys = sorted(frienergy_by_date.keys())
 

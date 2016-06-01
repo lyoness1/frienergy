@@ -256,8 +256,6 @@ def show_relationship(contact_id):
             date = i.date.strftime('%Y-%m-%d')
             notes[date] = i.note.text
 
-    print "\n\n\n", notes, "\n\n\n"
-
     # creates a dictionary of contact info to pass through JSON to HTML script
     contact_info = {
         'contact_id': c.contact_id,
@@ -560,7 +558,6 @@ def send_sms():
     # gets phone number and message from send-sms modal form
     to_phone = request.form.get('contact-phone')
     msg = request.form.get('msg')
-    print to_phone,  ": ", msg
 
     # Find these values at https://twilio.com/user/account
     ACCOUNT_SID = "AC33729a5fca2a567d46a8addffad26a1b" 
@@ -614,8 +611,9 @@ def make_graph_for_contact():
     # gets current user's id and the relevant contact's id
     user_id = session['logged_in_user_id']
     contact_id = request.form.get('id')
+    scale = request.form.get('scale')
 
-    return get_frienergy_by_time_for_contact(user_id, contact_id)
+    return get_frienergy_by_time_for_contact(user_id, contact_id, scale)
 
 
 @app.route('/frienergy-per-int-for-contact.json', methods=['POST'])

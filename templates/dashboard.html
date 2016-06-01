@@ -68,9 +68,6 @@
                         <label class="btn btn-primary pull-right toggle-graph">
                             <input type="radio" value="month" autocomplete="off"> Past Month
                         </label>
-                        <label class="btn btn-primary pull-right toggle-graph">
-                            <input type="radio" value="year" autocomplete="off"> Past Year
-                        </label>
                         <label class="btn btn-primary pull-right toggle-graph active">
                             <input type="radio" value="all-time" autocomplete="off" checked> All Time
                         </label>
@@ -79,7 +76,7 @@
                 </div>
 
                 <div class="panel-body">
-                    <div>
+                    <div id="line-graph-container">
                         <canvas id="lineGraph" height="100%"></canvas>
                     </div>
                 </div>
@@ -90,7 +87,7 @@
         <div class="col-sm-4">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <h4>Number of Interactions by Frienergy Amount</h4>
+                    <h4>Interactions by Frienergy Amount</h4>
                 </div>
                 <div class="panel-body">
                     <canvas id="pieChart" height="200%" width="100%"></canvas>

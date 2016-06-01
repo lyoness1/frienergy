@@ -30,12 +30,12 @@ def get_and_sort_contacts_by_power(user_id):
     # returns a list of contact objects for the given user
     user_contacts = db.session.query(Contact).filter(Contact.user_id == user_id).all()
 
-    # creates a list of tuples to store (power-%, fname, lname, contact_id) and sorts by power
+    # creates a list of tuples to store (power-%, first, last, contact_id) and sorts by power
     contact_powers = []
     if user_contacts:
-        for contact in user_contacts:
-            power = calculate_power(contact.contact_id)
-            contact_powers.append([power, contact.first_name, contact.last_name, contact.contact_id])
+        for c in user_contacts:
+            power = calculate_power(c.contact_id)
+            contact_powers.append([power, c.first_name, c.last_name, c.contact_id])
         contact_powers = sorted(contact_powers, reverse=True)
 
         # calculates power as a percentage of the largest power in the list
@@ -141,8 +141,12 @@ def calculate_power(contact_id):
     # relevant contact
     base = datetime.date.today()
     first_interaction = db.session.query(Interaction).filter(Interaction.
-                        contact_id == contact_id).first().date
-    numdays = (base - first_interaction).days
+                        contact_id == contact_id).first()
+    if first_interaction:
+        first_interaction = first_interaction.date
+        numdays = (base - first_interaction).days
+    else:
+        numdays = 0
 
     # gets contact object from their id
     contact = Contact.query.get(contact_id)
@@ -151,7 +155,7 @@ def calculate_power(contact_id):
     frienergy = contact.total_frienergy
 
     # calcualtes and returns relationship power
-    if numdays != 0:
+    if numdays > 1:
         return round(frienergy / numdays, 1)
     else:
         return 0
