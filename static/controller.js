@@ -14,6 +14,7 @@ angularApp.controller('MainController', ['$scope', '$http',
             var obj = data.data[key];
             $scope.reminders.push(obj);
         };
+        console.log($scope.reminders);
         return $scope.reminders;
     }
 

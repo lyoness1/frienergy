@@ -115,7 +115,7 @@
                         <thead>
                             <tr>
                                 <th>Name</th>
-                                <th>Relationship Power</th>
+                                <th id="pal-power">Pal Power</th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -201,7 +201,7 @@
                 </div>
                 <div class="panel-body panel-fixed">
 
-                    <table class="table" ng-if="reminders != []">
+                    <table class="table" ng-if="reminders.length">
                         <thead>
                             <tr>
                                 <th>Name</th>
@@ -215,7 +215,7 @@
                                 <td>{[ r.first_name ]} {[ r.last_name ]}</td>
                                 <td>{[ r.days_overdue ]}</td>
                                 <td>
-                                    <span ng-if="r.phone != ''">
+                                    <span ng-if="r.phone.length === 12">
                                         <a href="" ng-click="populateModal(r.first_name, r.last_name, r.phone)" class="send-sms-link" data-toggle="modal" data-target="#sendSMSModal" title="Send SMS" role="button"><img src="/static/images/sms.png" height="24" width="24"></a>
                                     </span>
                                 </td>
@@ -223,7 +223,7 @@
                         </tbody>
                         
                     </table>
-                    <div ng-if="reminders == []">
+                    <div ng-if="reminders.length === 0">
                         <p>You have no reminders.</p>
                     </div>
                 </div>

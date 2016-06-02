@@ -465,14 +465,24 @@ def edit_interaction():
     # if previous note, updates text attr, otherwise, creates new note
     text = request.form.get('notes')
     note_id = request.form.get('note-id')
-    if note_id:
-        note = Note.query.get(note_id)
-        note.text = text
-    elif text != "":
-        note = Note(contact_id=i.contact_id,
-                    interaction_id=interaction_id,
-                    text=text)
-        db.session.add(note)
+    # if the user entered a note:
+    if text: 
+        # if a note pre-existed, update the text attribute with new note text:
+        if note_id:
+            note = Note.query.get(note_id)
+            note.text = text
+        # if the note is new, create a new Note instance: 
+        elif text:
+            note = Note(contact_id=i.contact_id,
+                        interaction_id=interaction_id,
+                        text=text)
+            db.session.add(note)
+    # if the user deleted a note, or never entered one: 
+    else: 
+        # if there was previously a note, delete it
+        if note_id:
+            note = Note.query.get(note_id)
+            db.session.delete(note)
 
     db.session.commit()
 
@@ -489,11 +499,15 @@ def delete_interaction():
 
     # gets interaction object from edit-interaction form
     interaction_id = int(request.form.get('interaction-id'))
+    print interaction_id
     i = Interaction.query.get(interaction_id)
+    print i
+    print i.note
 
     # deletes note corresponding to interaction
     if i.note:
         db.session.delete(Note.query.get(interaction_id))
+        db.session.commit()
 
     # deletes interaction object from db
     db.session.delete(Interaction.query.get(interaction_id))
