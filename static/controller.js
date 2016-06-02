@@ -7,6 +7,7 @@ angularApp.controller('MainController', ['$scope', '$http',
     // $http.post returns an Object with an attribute named 'data'
     $http.post('/getReminders.json').then(addReminder); 
     
+    // parses the ajax response and populates page with reminders
     function addReminder(data) {
         $scope.reminders = [];
         for (var key in data.data) {
@@ -16,6 +17,7 @@ angularApp.controller('MainController', ['$scope', '$http',
         return $scope.reminders;
     }
 
+    // populates send-sms modal with contact's name and phone number
     $scope.populateModal = function(first, last, phone) {
         $scope.information = {}
         $scope.information['name'] = first + ' ' + last;

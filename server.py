@@ -68,6 +68,54 @@ def show_dashboard(user_id):
                            total_contacts=total_contacts)
 
 
+@app.route('/contact/<int:contact_id>')
+def show_relationship(contact_id):
+    """gets contact information from db for edit contact form"""
+
+    # gets current user's id
+    user_id = session['logged_in_user_id']
+
+    # retrieves existing contact object from db
+    c = Contact.query.get(contact_id)
+
+    # calculates interesting metrics for a relationship's health
+    all_interactions = db.session.query(Interaction).filter(Interaction
+        .user_id == user_id).filter(Interaction.contact_id == contact_id).all()
+    total_interactions = len(all_interactions)
+    avg_power = calculate_power(contact_id)
+    avg_frienergy_per_int = round(sum(i.frienergy for i in all_interactions) / total_interactions, 1)
+
+    # gets all notes for a particular contact
+    notes = {}
+    for i in all_interactions:
+        if i.note:
+            date = i.date.strftime('%Y-%m-%d')
+            notes[date] = i.note.text
+
+    # creates a dictionary of contact info to pass through JSON to HTML script
+    contact_info = {
+        'contact_id': c.contact_id,
+        'first_name': c.first_name,
+        'last_name': c.last_name,
+        'email': c.email,
+        'cell_phone': c.cell_phone,
+        'street': c.street,
+        'city': c.city,
+        'state': c.state,
+        'zipcode': c.zipcode,
+        'total_frienergy': c.total_frienergy,
+        'avg_t_btwn_ints': c.avg_t_btwn_ints,
+        't_delta_since_last_int': c.t_since_last_int,
+        'total_interactions': total_interactions,
+        'avg_power': avg_power,
+        'avg_frienergy_each_interaction': avg_frienergy_per_int,
+    }
+
+    return render_template('contact.html',
+                           info=contact_info,
+                           notes=notes)
+
+
 ################################################################################
 # Routes to handle LOGIN and LOGOUT
 
@@ -232,53 +280,6 @@ def add_contact():
     return redirect("/dashboard/"+str(user_id))
 
 
-@app.route('/contact/<int:contact_id>')
-def show_relationship(contact_id):
-    """gets contact information from db for edit contact form"""
-
-    # gets current user's id
-    user_id = session['logged_in_user_id']
-
-    # retrieves existing contact object from db
-    c = Contact.query.get(contact_id)
-
-    # calculates interesting metrics for a relationship's health
-    all_interactions = db.session.query(Interaction).filter(Interaction
-        .user_id == user_id).filter(Interaction.contact_id == contact_id).all()
-    total_interactions = len(all_interactions)
-    avg_power = calculate_power(contact_id)
-    avg_frienergy_per_int = round(sum(i.frienergy for i in all_interactions) / total_interactions, 1)
-
-    # gets all notes for a particular contact
-    notes = {}
-    for i in all_interactions:
-        if i.note:
-            date = i.date.strftime('%Y-%m-%d')
-            notes[date] = i.note.text
-
-    # creates a dictionary of contact info to pass through JSON to HTML script
-    contact_info = {
-        'contact_id': c.contact_id,
-        'first_name': c.first_name,
-        'last_name': c.last_name,
-        'email': c.email,
-        'cell_phone': c.cell_phone,
-        'street': c.street,
-        'city': c.city,
-        'state': c.state,
-        'zipcode': c.zipcode,
-        'total_frienergy': c.total_frienergy,
-        'avg_t_btwn_ints': c.avg_t_btwn_ints,
-        't_delta_since_last_int': c.t_since_last_int,
-        'total_interactions': total_interactions,
-        'avg_power': avg_power,
-        'avg_frienergy_each_interaction': avg_frienergy_per_int,
-    }
-
-    return render_template('contact.html',
-                           info=contact_info,
-                           notes=notes)
-
 
 @app.route('/getContact.json')
 def get_contact():
@@ -302,6 +303,7 @@ def get_contact():
     }
 
     return jsonify(contact_info)
+
 
 @app.route('/editContact', methods=['POST'])
 def edit_contact():
@@ -355,6 +357,7 @@ def delete_contact():
     # redirects to user's dashboard
     user_id = session['logged_in_user_id']
     return redirect("/dashboard/"+str(user_id))
+
 
 ################################################################################
 # Routes to handle adding/deleting/editing and INTERACTIONS
@@ -442,6 +445,7 @@ def get_interaction():
 
     return jsonify(interaction_info)
 
+
 @app.route('/editInteraction', methods=['POST'])
 def edit_interaction():
     """updates an interaction"""
@@ -500,6 +504,7 @@ def delete_interaction():
     # redirects to user's dashboard
     user_id = session['logged_in_user_id']
     return redirect("/dashboard/"+str(user_id))
+
 
 ################################################################################
 # Routes to handle NOTES
@@ -579,6 +584,7 @@ def send_sms():
     user_id = session['logged_in_user_id']
     return redirect("/dashboard/"+str(user_id))
 
+
 ################################################################################
 # routes to get data for rendering graphics
 
@@ -632,7 +638,7 @@ def make_pie_chart_for_contact():
 if __name__ == "__main__": # pragma: no cover
     # We have to set debug=True here, since it has to be True at the point
     # that we invoke the DebugToolbarExtension
-    app.debug = True
+    app.debug = False
 
     connect_to_db(app)
 

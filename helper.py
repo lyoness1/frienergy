@@ -151,11 +151,16 @@ def calculate_power(contact_id):
     # gets contact object from their id
     contact = Contact.query.get(contact_id)
 
+    # determines if there are enough interactions to calculate power
+    all_interactions = db.session.query(Interaction).filter(
+        Interaction.contact_id == contact_id).all()
+    total_interactions = len(all_interactions)
+
     # gets current attributes of total frienergy and avg time delta between ints
     frienergy = contact.total_frienergy
 
     # calcualtes and returns relationship power
-    if numdays > 1:
+    if (numdays > 1) and (total_interactions > 1):
         return round(frienergy / numdays, 1)
     else:
         return 0
