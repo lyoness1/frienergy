@@ -499,10 +499,7 @@ def delete_interaction():
 
     # gets interaction object from edit-interaction form
     interaction_id = int(request.form.get('interaction-id'))
-    print interaction_id
     i = Interaction.query.get(interaction_id)
-    print i
-    print i.note
 
     # deletes note corresponding to interaction
     if i.note:

@@ -7129,9 +7129,3 @@ label {
 .contact-table > td {
   font-size: 16px;
 }
-#lineGraph {
-  height: 100%;
-}
-.col, .panel {
-  height: 100%;
-}

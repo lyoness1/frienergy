@@ -57,10 +57,9 @@
         <!-- line graph column -->
         <div class="col-sm-8">
             <div class="panel panel-default">
-                <div class="panel-heading clearfix">
-                    
-                    <h4 class="pull-left">Total Frienergy by Date</h4>
 
+                <div class="panel-heading clearfix">
+                    <h4 class="pull-left">Total Frienergy by Date</h4>
                     <div class="btn-toolbar" data-toggle="buttons">
                         <label class="btn btn-primary pull-right toggle-graph">
                             <input type="radio" value="week" autocomplete="off"> Past Week
@@ -72,14 +71,14 @@
                             <input type="radio" value="all-time" autocomplete="off" checked> All Time
                         </label>
                     </div>
-
                 </div>
 
                 <div class="panel-body">
-                    <div id="line-graph-container">
+                    <div class="fix-height">
                         <canvas id="lineGraph" height="100%"></canvas>
                     </div>
                 </div>
+
             </div>
         </div>
             
@@ -90,7 +89,9 @@
                     <h4>Interactions by Frienergy Amount</h4>
                 </div>
                 <div class="panel-body">
-                    <canvas id="pieChart" height="200%" width="100%"></canvas>
+                    <div class="fix-height">
+                        <canvas id="pieChart" height="200%" width="100%"></canvas>
+                    </div>
                 </div>
             </div>
         </div>
