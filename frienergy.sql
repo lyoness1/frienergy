@@ -234,8 +234,8 @@ COPY contacts (user_id, contact_id, first_name, last_name, email, cell_phone, st
 1	21	Aisling	Dempsey	aisling.n.dempsey@gmail.com	415-470-3073		San Francisco			26	2.85714285714285721	2
 1	8	Daniel	Feeny			607 Mountain Home Rd	Woodside	CA	94062	10	14	12
 1	10	Jaime	Lyon	lyon.jaime@gmail.com	510-725-2135	235 Walter Hays Dr.	Palo Alto		94303	40	2.18181818181818166	1
-1	7	Christina	Feeny	christina@feenys.net	650-380-0666	607 Mountain Home Rd	Woodside	CA	94062	43	6.08333333333333304	9
 1	13	Chuck	Bonnici							67	6.22222222222222232	5
+1	7	Christina	Feeny	christina@feenys.net	650-380-0666	607 Mountain Home Rd	Woodside	CA	94062	43	5.5	9
 1	2	Christina	Clarkin	cristinamclarkin@gmail.com	201-887-1119					13	17	10
 1	27	Sharon	Weinnbar							3	0	10
 1	28	Eric								8	0	10
@@ -379,7 +379,7 @@ COPY interactions (interaction_id, contact_id, user_id, date, frienergy, t_delta
 -- Name: interactions_interaction_id_seq; Type: SEQUENCE SET; Schema: public; Owner: alyon
 --
 
-SELECT pg_catalog.setval('interactions_interaction_id_seq', 123, true);
+SELECT pg_catalog.setval('interactions_interaction_id_seq', 124, true);
 
 
 --
