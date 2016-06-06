@@ -281,8 +281,9 @@ body {
   font-size: 14px;
   line-height: 1.42857143;
   color: #555555;
-  background-color: rgba(118, 176, 238, 0.5);
-  /*background: url("/static/images/paper_fibers.png");*/
+  /*background-color: rgba(118, 176, 238, 0.5);*/
+  background: url("/static/images/friendship.jpeg");
+  background-size: cover;
 }
 input,
 button,
@@ -607,7 +608,7 @@ a.bg-danger:focus {
 .page-header {
   padding-bottom: 9px;
   margin: 40px 0 20px;
-  border-bottom: 1px solid #eeeeee;
+  border-bottom: 2px solid rgba(85, 85, 85, 0.5);
 }
 ul,
 ol {
@@ -3685,8 +3686,12 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
   }
 }
 .navbar-default {
-  background-color: #28b62c;
-  border-color: #229b25;
+  /*background-color: #28b62c;*/
+  background-color: rgb(108, 100, 139);
+  background: -moz-linear-gradient(top, rgb(16, 136, 18) 0%, rgb(40, 182, 44) 100%);
+  background: -webkit-linear-gradient(top, rgb(16, 136, 18) 0%, rgb(40, 182, 44) 100%);
+  background: linear-gradient(to bottom, rgb(16, 136, 18) 0%, rgb(40, 182, 44) 100%);
+  /*border-color: #229b25;*/
 }
 .navbar-default .navbar-brand {
   color: #ffffff;
@@ -5115,7 +5120,7 @@ button.close {
   filter: alpha(opacity=50);
 }
 .modal-header {
-  background-color: #eee;
+  background-color: #999;
   padding: 15px;
   border-bottom: 1px solid #e5e5e5;
 }
@@ -6326,4 +6331,17 @@ label {
 }
 .navbar-right a {
   font-size: 16px;
+}
+.page-header h1 {
+  font-family: Lobster;
+  font-size: 72px;
+  text-shadow: 2px 2px #555;
+  color: white;
+}
+.homepage a {
+  color: white !important;
+  text-decoration: none;
+}
+.homepage {
+  color: white !important;
 }
