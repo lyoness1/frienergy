@@ -6,21 +6,29 @@ import datetime
 import random
 
 # global colors for use in graphics
-COLORS = {"Periwinkle": "rgba(0, 0, 168, 0.6)",
-          "Purple": "rgba(84, 0, 168, 0.6)",
-          "Pink": "rgba(168, 0, 168, 0.6)",
-          "Red": "rgba(168, 0, 0, 0.6)",
-          "Green": "rgba(168, 0, 0, 0.6)",
-          "Teal": "rgba(0, 168, 168, 0.6)",
-          "Blue": "rgba(0, 84, 168, 0.6)",
-          "lightPeriwinkle": "rgba(0, 0, 168, 0.3)",
-          "lightPurple": "rgba(84, 0, 168, 0.3)",
-          "lightPink": "rgba(168, 0, 168, 0.3)",
-          "lightRed": "rgba(168, 0, 0, 0.3)",
-          "lightGreen": "rgba(168, 0, 0, 0.3)",
-          "lightTeal": "rgba(0, 168, 168, 0.3)",
-          "lightBlue": "rgba(0, 84, 168, 0.3)",
-          }
+# COLORS = {"Periwinkle": "rgba(0, 0, 168, 0.6)",
+#           "Purple": "rgba(84, 0, 168, 0.6)",
+#           "Pink": "rgba(168, 0, 168, 0.6)",
+#           "Red": "rgba(168, 0, 0, 0.6)",
+#           "Green": "rgba(168, 0, 0, 0.6)",
+#           "Teal": "rgba(0, 168, 168, 0.6)",
+#           "Blue": "rgba(0, 84, 168, 0.6)",
+#           "lightPeriwinkle": "rgba(0, 0, 168, 0.3)",
+#           "lightPurple": "rgba(84, 0, 168, 0.3)",
+#           "lightPink": "rgba(168, 0, 168, 0.3)",
+#           "lightRed": "rgba(168, 0, 0, 0.3)",
+#           "lightGreen": "rgba(168, 0, 0, 0.3)",
+#           "lightTeal": "rgba(0, 168, 168, 0.3)",
+#           "lightBlue": "rgba(0, 84, 168, 0.3)",
+#           }
+
+COLORS = {
+    "Green": "rgba(40, 182, 44, .5)",
+    "Blue": "rgba(28, 124, 226, .5)",
+    "Pink": "rgba(226, 28, 223, .5)",
+    "Yellow": "rgba(251, 255, 15, .5)",
+    "Orange": "rgba(255, 144, 25, .5)",
+}
 
 
 ################################################################################
@@ -69,12 +77,12 @@ def get_frienergy_by_time(user_id, scale):
         "datasets": [
             {
                 "label": "Total Frienergy",
-                "backgroundColor": "rgba(0, 178, 0, 0.4)",
+                "backgroundColor": "rgba(40, 182, 44, .5)",
                 "data": total_frienergy_per_day
             },
             {
                 "label": "Number of Interactions",
-                "backgroundColor": "rgba(0, 178, 0, 0.4)",
+                "backgroundColor": "rgba(40, 182, 44, .5)",
                 "data": number_of_ints_per_day
             }
         ],
