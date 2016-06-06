@@ -1,0 +1,55 @@
+font-family: 'Pacifico', cursive;
+font-family: 'Quicksand', sans-serif;
+
+.myWidget {
+  height: 96px;
+  width: 96px;
+  display: block;
+  opacity: 0.2; 
+}
+.modalWidget {
+  height: 64px;
+  width: 64px;
+  display: block;
+  opacity: 0.2;
+}
+.widget h2 {
+  /*color: white;*/
+}
+#widget1 {
+  /*background-color: rgb(205, 83, 96);*/
+}
+#widget1.modal {
+  /*background-color: rgba(205, 83, 96, 0.4);*/
+}
+#widget2 {
+  /*background-color: rgb(67, 132, 150);*/
+}
+#widget2 .modal {
+  /*background-color: rgba(67, 132, 150, 0.4);*/
+}
+#widget3 {
+  /*background-color: rgb(40, 109, 168);*/
+}
+#widget3 .modal {
+  /*background-color: rgba(40, 109, 168, 0.4);*/
+}
+#widget4 {
+  /*background-color: rgb(107, 186, 167);*/
+}
+#widget4 .modal {
+  /*background-color: rgba(107, 186, 167, 0.4);*/
+}
+.contact-table > th {
+  /*font-size: 24px;*/
+}
+.contact-table > td {
+  /*font-size: 16px;*/
+}
+.fix-height {
+  height: 340px;
+}
+.panel-fixed {
+  height: 400px;
+  overflow-y: scroll;
+}
