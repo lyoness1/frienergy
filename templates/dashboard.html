@@ -21,7 +21,7 @@
             <div class="panel panel-default widget" id="widget2">
                 <div class="panel-body clearfix">
                     <img src="/static/images/contacts.png" class="myWidget pull-right">
-                    <h4>TOTAL CONTACTS</h4>
+                    <h4>CONTACTS</h4>
                     <h2>{{ total_contacts }}</h2>
                 </div>
             </div>
@@ -32,7 +32,7 @@
             <div class="panel panel-default widget" id="widget3">
                 <div class="panel-body clearfix">
                     <img src="/static/images/interaction.png" class="myWidget pull-right">
-                    <h4>TOTAL INTERACTIONS</h4>
+                    <h4>INTERACTIONS</h4>
                     <h2>{{ total_interactions }}</h2>
                 </div>
             </div>
@@ -43,7 +43,7 @@
             <div class="panel panel-default widget" id="widget4">
                 <div class="panel-body clearfix">
                     <img src="/static/images/party.png" class="myWidget pull-right">
-                    <h4>TOTAL FRIENERGY</h4>
+                    <h4>FRIENERGY</h4>
                     <h2>{{ total_frienergy }}</h2>
                 </div>
             </div>
@@ -178,7 +178,7 @@
                                 <td>{{ i[0].contact.first_name }} {{ i[0].contact.last_name }}</td>
                                 <td>{{ i[0].frienergy }}</td>
                                 {% if i[0].note %}
-                                <td><a href="" class="note-popover" data-toggle="popover" data-trigger="focus" title="Note" data-placement="top" data-id="{{ i[0].interaction_id }}" tabindex="0" role="button" id="popover-tag"><img src="/static/images/Note.png" alt="Note" height="24" width="24"></a></td>
+                                <td><a href="" class="note-popover" data-toggle="popover" data-trigger="focus" title="Note" data-placement="top" data-id="{{ i[0].interaction_id }}" tabindex="0" role="button" id="popover-tag"><img class="note-icon" src="/static/images/Note.png" alt="Note" height="24" width="24"></a></td>
                                 {% endif %}
                             </tr>
                             {% endfor %}

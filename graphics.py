@@ -69,12 +69,12 @@ def get_frienergy_by_time(user_id, scale):
         "datasets": [
             {
                 "label": "Total Frienergy",
-                "backgroundColor": "rgba(107, 186, 167, .4)",
+                "backgroundColor": "rgba(0, 178, 0, 0.4)",
                 "data": total_frienergy_per_day
             },
             {
                 "label": "Number of Interactions",
-                "backgroundColor": "rgba(107, 186, 167, .4)",
+                "backgroundColor": "rgba(0, 178, 0, 0.4)",
                 "data": number_of_ints_per_day
             }
         ],
