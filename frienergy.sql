@@ -224,7 +224,6 @@ COPY contacts (user_id, contact_id, first_name, last_name, email, cell_phone, st
 1	28	Eric								8	0	14
 1	31	Holly	Still			530 Bay Rd. 	Menlo Park	CA	94025	4	0	11
 1	11	Hilary	Jones	hilarypjones@yahoo.com	650-326-8232	235 Walter Hays Dr.	Palo Alto	CA	94303	8	11	13
-1	33	Leslie	Castellanos	leslie@hackbrightacademy.com						2	0	0
 1	25	Inas	Hyatt	inas.raheema@gmail.com						18	3.5	3
 1	6	Veronica	Erik	veronica@ellenblakeley.com	707-696-0691					33	4.28571428571428559	1
 1	13	Chuck	Bonnici							70	6.40000000000000036	1
@@ -242,9 +241,10 @@ COPY contacts (user_id, contact_id, first_name, last_name, email, cell_phone, st
 1	8	Daniel	Feeny			607 Mountain Home Rd	Woodside	CA	94062	13	14	2
 1	18	Lizzy	Gilman							6	33	0
 1	1	Anna	Kiefer	annakiefer12@gmail.com	301-536-3989					26	3.44444444444444464	0
-1	4	Katie	Simmons	katie@katie.codes	651-361-0974					46	3.20000000000000018	0
 1	17	Karl	Gummerlock		650-704-6324					23	8.80000000000000071	0
 1	9	Curtis	Feeny	curtis@feenys.net		607 Mountain Home Rd	Woodside	CA	94062	33	8	0
+1	33	Leslie	Castellanos	leslie@hackbrightacademy.com						4	4	0
+1	4	Katie	Simmons	katie@katie.codes	651-361-0974					45	3.09090909090909083	0
 \.
 
 
@@ -376,7 +376,6 @@ COPY interactions (interaction_id, contact_id, user_id, date, frienergy, t_delta
 125	25	1	2016-06-03	1	4
 126	7	1	2016-06-03	2	10
 127	6	1	2016-06-05	1	3
-138	33	1	2016-06-06	2	0
 129	13	1	2016-06-05	3	8
 130	7	1	2016-06-06	4	3
 132	9	1	2016-06-05	1	10
@@ -389,6 +388,8 @@ COPY interactions (interaction_id, contact_id, user_id, date, frienergy, t_delta
 137	4	1	2016-06-06	4	2
 139	17	1	2016-06-06	4	2
 140	9	1	2016-06-06	5	1
+138	33	1	2016-06-06	2	4
+141	33	1	2016-06-02	2	0
 \.
 
 
@@ -396,7 +397,7 @@ COPY interactions (interaction_id, contact_id, user_id, date, frienergy, t_delta
 -- Name: interactions_interaction_id_seq; Type: SEQUENCE SET; Schema: public; Owner: alyon
 --
 
-SELECT pg_catalog.setval('interactions_interaction_id_seq', 140, true);
+SELECT pg_catalog.setval('interactions_interaction_id_seq', 142, true);
 
 
 --
@@ -422,6 +423,7 @@ COPY notes (note_id, contact_id, interaction_id, text) FROM stdin;
 29	4	136	Dinner after class
 30	4	137	BIG HUGS!
 31	33	138	UI review
+32	33	141	Angular code review
 \.
 
 
@@ -429,7 +431,7 @@ COPY notes (note_id, contact_id, interaction_id, text) FROM stdin;
 -- Name: notes_note_id_seq; Type: SEQUENCE SET; Schema: public; Owner: alyon
 --
 
-SELECT pg_catalog.setval('notes_note_id_seq', 31, true);
+SELECT pg_catalog.setval('notes_note_id_seq', 32, true);
 
 
 --
