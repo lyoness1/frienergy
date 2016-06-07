@@ -5,10 +5,17 @@ from flask import jsonify
 import datetime
 import random
 
-COLORS = ['rgba(209, 249, 210, .5)', 'rgb(209, 249, 210)', 'rgb(164, 243, 165)',
-          'rgb(118, 238, 120)', 'rgb(73, 232, 76)', 'rgb(40, 182, 44)',
-          'rgb(22, 181, 25)', 'rgb(16, 136, 18)', 'rgb(11, 90, 12)',
-          'rgb(5, 45, 6)']
+# greens
+# COLORS = ['rgba(209, 249, 210, .5)', 'rgb(209, 249, 210)', 'rgb(164, 243, 165)',
+#           'rgb(118, 238, 120)', 'rgb(73, 232, 76)', 'rgb(40, 182, 44)',
+#           'rgb(22, 181, 25)', 'rgb(16, 136, 18)', 'rgb(11, 90, 12)',
+#           'rgb(5, 45, 6)']
+
+# blues
+COLORS = ['rgb(176, 209, 231)', 'rgb(156, 198, 225)', 'rgb(137, 186, 219)',
+          'rgb(117, 175, 213)', 'rgb(97, 164, 208)', 'rgb(78, 152, 202)',
+          'rgb(58, 141, 196)', 'rgb(52, 127, 176)', 'rgb(46, 113, 157)',
+          'rgb(41, 98, 137)']
 
 
 ################################################################################
@@ -57,12 +64,12 @@ def get_frienergy_by_time(user_id, scale):
         "datasets": [
             {
                 "label": "Total Frienergy",
-                "backgroundColor": "rgba(40, 182, 44, .5)",
+                "backgroundColor": "rgba(238, 180, 116, .5)",
                 "data": total_frienergy_per_day
             },
             {
                 "label": "Number of Interactions",
-                "backgroundColor": "rgb(40, 182, 44)",
+                "backgroundColor": "rgb(238, 180, 116)",
                 "data": number_of_ints_per_day
             }
         ],
@@ -149,12 +156,12 @@ def get_frienergy_by_time_for_contact(user_id, contact_id, scale):
         "datasets": [
             {
                 "label": "Total Frienergy",
-                "backgroundColor": "rgba(40, 182, 44, .5)",
+                "backgroundColor": "rgba(238, 180, 116, .5)",
                 "data": total_frienergy_per_day
             },
             {
                 "label": "Number of Interactions",
-                "backgroundColor": "rgb(40, 182, 44)",
+                "backgroundColor": "rgb(238, 180, 116)",
                 "data": number_of_ints_per_day
             }
         ],
