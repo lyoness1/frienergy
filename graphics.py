@@ -5,10 +5,10 @@ from flask import jsonify
 import datetime
 import random
 
-COLORS = ["rgb(5, 45, 6)", "rgb(11, 90, 12)", "rgb(16, 136, 18)",
-          "rgb(22, 181, 25)", "rgb(40, 182, 44)", "rgb(73, 232, 76)",
-          "rgb(118, 238, 120)", "rgb(164, 243, 165)", "rgb(209, 249, 210)",
-          "rgba(209, 249, 210, .5)"]
+COLORS = ['rgba(209, 249, 210, .5)', 'rgb(209, 249, 210)', 'rgb(164, 243, 165)',
+          'rgb(118, 238, 120)', 'rgb(73, 232, 76)', 'rgb(40, 182, 44)',
+          'rgb(22, 181, 25)', 'rgb(16, 136, 18)', 'rgb(11, 90, 12)',
+          'rgb(5, 45, 6)']
 
 
 ################################################################################
@@ -149,12 +149,12 @@ def get_frienergy_by_time_for_contact(user_id, contact_id, scale):
         "datasets": [
             {
                 "label": "Total Frienergy",
-                "backgroundColor": "rgba(107, 186, 167, .4)",
+                "backgroundColor": "rgba(40, 182, 44, .5)",
                 "data": total_frienergy_per_day
             },
             {
                 "label": "Number of Interactions",
-                "backgroundColor": "rgba(107, 186, 167, .4)",
+                "backgroundColor": "rgb(40, 182, 44)",
                 "data": number_of_ints_per_day
             }
         ],
@@ -180,22 +180,13 @@ def get_frienergy_totals_for_contact(user_id, contact_id):
     for interaction in all_interactions:
         frienergies[interaction.frienergy] += 1
 
-    # calculates values as percentages of total number of interactions
-    # for x in range(1, 11):
-    #     frienergies[x] = round((float(frienergies[x])/total_interactions)*100,0)
-
-    # gets 10 colors from global COLORS dictionary
-    colors = []
-    for x in range(0, 10):
-        colors.append(random.choice(COLORS.values()))
-
     # renders data readable for pie chart
     data_dict = {
         "labels": frienergies.keys(),
         "datasets": [
             {
                 "data": frienergies.values(),
-                "backgroundColor": colors
+                "backgroundColor": COLORS,
             }
         ],
     }
