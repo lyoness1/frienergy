@@ -3364,7 +3364,7 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
   min-height: 50px;
   margin-bottom: 20px;
   padding: 10px;
-  border: 1px solid transparent;
+  border: 1px solid rgb(8, 68, 8);
 }
 @media (min-width: 768px) {
   .navbar {
@@ -3688,12 +3688,9 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
   }
 }
 .navbar-default {
-  /*background-color: #28b62c;*/
-  background-color: rgb(108, 100, 139);
-  background: -moz-linear-gradient(top, rgb(16, 136, 18) 0%, rgb(40, 182, 44) 100%);
-  background: -webkit-linear-gradient(top, rgb(16, 136, 18) 0%, rgb(40, 182, 44) 100%);
-  background: linear-gradient(to bottom, rgb(16, 136, 18) 0%, rgb(40, 182, 44) 100%);
-  /*border-color: #229b25;*/
+  background: -moz-linear-gradient(top, rgb(40, 182, 44) 0%, rgb(11, 90, 12) 100%);
+  background: -webkit-linear-gradient(top, rgb(40, 182, 44) 0%, rgb(11, 90, 12) 100%);
+  background: linear-gradient(to bottom, rgb(40, 182, 44) 0%, rgb(11, 90, 12) 100%);
 }
 .navbar-default .navbar-brand {
   color: #ffffff;
@@ -4266,8 +4263,8 @@ a.thumbnail.active {
   color: #e6e6e6;
 }
 .alert-info {
-  background-color: #75caeb;
-  border-color: #40b5e3;
+  background-color: rgba(255, 255, 0, 0.4);
+  border-color: rgba(255, 255, 0, 0.2);
   color: #ffffff;
 }
 .alert-info hr {

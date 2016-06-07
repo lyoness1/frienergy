@@ -18,7 +18,7 @@ var ctx_line_contact = $("#contactLineGraph").get(0).getContext("2d");
 $.post("/frienergy-per-time-for-contact.json",
     data={'id': contactId, 'scale': 'all-time'},
     function (data) {
-        myLineChart = new Chart(ctx_line_contact, 
+        myLineChart = new Chart(ctx_line_contact,
         {type: 'line', data: data, options: lineOptions
     });
 });
@@ -52,6 +52,6 @@ var ctx_pie_contact = $("#contactPieChart");
 
 // draws the line chart on page load
 $.post("/frienergy-per-int-for-contact.json", data={'id': contactId}, function (data) {
-  var myPieChart = new Chart(ctx_pie_contact, 
+  var myPieChart = new Chart(ctx_pie_contact,
     {type: 'pie', data: data, options: pieOptions});
 });

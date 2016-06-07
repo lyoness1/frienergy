@@ -2,8 +2,8 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 9.5.1
--- Dumped by pg_dump version 9.5.1
+-- Dumped from database version 9.5.2
+-- Dumped by pg_dump version 9.5.2
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -235,16 +235,16 @@ COPY contacts (user_id, contact_id, first_name, last_name, email, cell_phone, st
 1	32	Stephanie	Simon							5	0	6
 1	12	Kristine	Chou		808-342-1680					2	3	24
 1	23	Joyce	Lin							8	0	24
-1	17	Karl	Gummerlock		650-704-6324					19	10.5	2
 1	21	Aisling	Dempsey	aisling.n.dempsey@gmail.com	415-470-3073		San Francisco			26	2.85714285714285721	6
 1	10	Jaime	Lyon	lyon.jaime@gmail.com	510-725-2135	235 Walter Hays Dr.	Palo Alto		94303	40	2.18181818181818166	5
 1	2	Christina	Clarkin	cristinamclarkin@gmail.com	201-887-1119					13	17	14
 1	7	Christina	Feeny	christina@feenys.net	650-380-0666	607 Mountain Home Rd	Woodside	CA	94062	47	5.53846153846153832	0
-1	9	Curtis	Feeny	curtis@feenys.net		607 Mountain Home Rd	Woodside	CA	94062	28	8.875	1
 1	8	Daniel	Feeny			607 Mountain Home Rd	Woodside	CA	94062	13	14	2
 1	18	Lizzy	Gilman							6	33	0
 1	1	Anna	Kiefer	annakiefer12@gmail.com	301-536-3989					26	3.44444444444444464	0
 1	4	Katie	Simmons	katie@katie.codes	651-361-0974					46	3.20000000000000018	0
+1	17	Karl	Gummerlock		650-704-6324					23	8.80000000000000071	0
+1	9	Curtis	Feeny	curtis@feenys.net		607 Mountain Home Rd	Woodside	CA	94062	33	8	0
 \.
 
 
@@ -386,7 +386,9 @@ COPY interactions (interaction_id, contact_id, user_id, date, frienergy, t_delta
 135	1	1	2016-06-03	3	2
 128	4	1	2016-06-04	2	1
 136	4	1	2016-06-03	3	3
-137	4	1	2016-06-06	8	2
+137	4	1	2016-06-06	4	2
+139	17	1	2016-06-06	4	2
+140	9	1	2016-06-06	5	1
 \.
 
 
@@ -394,7 +396,7 @@ COPY interactions (interaction_id, contact_id, user_id, date, frienergy, t_delta
 -- Name: interactions_interaction_id_seq; Type: SEQUENCE SET; Schema: public; Owner: alyon
 --
 
-SELECT pg_catalog.setval('interactions_interaction_id_seq', 138, true);
+SELECT pg_catalog.setval('interactions_interaction_id_seq', 140, true);
 
 
 --

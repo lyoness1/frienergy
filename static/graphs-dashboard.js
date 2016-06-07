@@ -35,13 +35,13 @@ var pieOptions = {
   legend: {
             display: false,
           }
-}
+};
 
 // grabs the location of the canvas element from the DOM
 var ctx_pie = $("#pieChart");
 
 // draws the pie chart when page loads
 $.get("/frienergy-per-int.json", function (data) {
-  var myPieChart = new Chart(ctx_pie, 
+  var myPieChart = new Chart(ctx_pie,
     {type: 'pie', data: data, options: pieOptions});
 });
