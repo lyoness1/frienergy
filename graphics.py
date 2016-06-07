@@ -5,19 +5,10 @@ from flask import jsonify
 import datetime
 import random
 
-COLORS = {
-    "10": "rgb(5, 45, 6)",
-    "9": "rgb(11, 90, 12)",
-    "8": "rgb(16, 136, 18)",
-    "7": "rgb(22, 181, 25)",
-    "6": "rgb(40, 182, 44)",
-    "5": "rgb(73, 232, 76)",
-    "4": "rgb(118, 238, 120)",
-    "3": "rgb(164, 243, 165)",
-    "2": "rgb(209, 249, 210)",
-    "1": "rgba(209, 249, 210, .5)",
-
-}
+COLORS = ["rgb(5, 45, 6)", "rgb(11, 90, 12)", "rgb(16, 136, 18)",
+          "rgb(22, 181, 25)", "rgb(40, 182, 44)", "rgb(73, 232, 76)",
+          "rgb(118, 238, 120)", "rgb(164, 243, 165)", "rgb(209, 249, 210)",
+          "rgba(209, 249, 210, .5)"]
 
 
 ################################################################################
@@ -96,22 +87,13 @@ def get_frienergy_totals(user_id):
     for interaction in all_interactions:
         frienergies[interaction.frienergy] += 1
 
-    # calculates values as percentages of total number of interactions
-    # for x in range(1, 11):
-    #     frienergies[x] = round((float(frienergies[x])/total_interactions)*100,0)
-
-    # gets 10 colors from global COLORS dictionary
-    colors = []
-    for x in range(0, 10):
-        colors.append(random.choice(COLORS.values()))
-
     # renders data readable for pie chart
     data_dict = {
         "labels": frienergies.keys(),
         "datasets": [
             {
                 "data": frienergies.values(),
-                "backgroundColor": COLORS.value()
+                "backgroundColor": COLORS,
             }
         ],
     }
