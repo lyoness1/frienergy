@@ -83,7 +83,8 @@ def show_relationship(contact_id):
         .user_id == user_id).filter(Interaction.contact_id == contact_id).all()
     total_interactions = len(all_interactions)
     avg_power = calculate_power(contact_id)
-    avg_frienergy_per_int = round(sum(i.frienergy for i in all_interactions) / total_interactions, 1)
+    avg_frienergy_per_int = round(sum(i.frienergy 
+        for i in all_interactions) / total_interactions, 1)
 
     # gets all notes for a particular contact
     notes = {}
